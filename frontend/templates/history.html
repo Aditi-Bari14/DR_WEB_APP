@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/login">Logout</a>
+    </div>
+</div>
+
+
+<!-- HISTORY CONTAINER -->
+<div class="container">
+
+    <h2>Prediction History</h2>
+    <p class="subtitle">
+        View all your previous diabetic retinopathy predictions.
+    </p>
+
+    <!-- HISTORY TABLE -->
+    <div class="history-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Prediction</th>
+                    <th>Confidence</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dummy data for now -->
+                <tr>
+                    <td>12-09-2024</td>
+                    <td>Moderate DR</td>
+                    <td>92%</td>
+                    <td><a href="/explainability">View</a></td>
+                </tr>
+                <tr>
+                    <td>10-09-2024</td>
+                    <td>No DR</td>
+                    <td>97%</td>
+                    <td><a href="/explainability">View</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

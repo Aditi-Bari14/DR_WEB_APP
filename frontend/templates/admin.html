@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/login">Logout</a>
+    </div>
+</div>
+
+<!-- ADMIN CONTENT -->
+<div class="container">
+
+    <h2>System Administration</h2>
+    <p class="subtitle">
+        Monitor users, predictions and system activity
+    </p>
+
+    <!-- ADMIN STATS -->
+    <div class="dashboard-cards">
+
+        <div class="card">
+            <h3>Total Users</h3>
+            <p class="big-number">128</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Predictions</h3>
+            <p class="big-number">542</p>
+        </div>
+
+        <div class="card">
+            <h3>High Risk Cases</h3>
+            <p class="big-number">76</p>
+        </div>
+
+    </div>
+
+    <!-- USER TABLE -->
+    <div class="admin-box">
+        <h3>Registered Users</h3>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+            <tr>
+                <td>Aditi Bari</td>
+                <td>aditi@gmail.com</td>
+                <td>User</td>
+            </tr>
+            <tr>
+                <td>Dr. Sharma</td>
+                <td>drsharma@gmail.com</td>
+                <td>Admin</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- PREDICTION LOG -->
+    <div class="admin-box">
+        <h3>Recent Predictions</h3>
+
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Prediction</th>
+                <th>Confidence</th>
+            </tr>
+            <tr>
+                <td>Aditi Bari</td>
+                <td>Moderate DR</td>
+                <td>92%</td>
+            </tr>
+            <tr>
+                <td>Rahul Patil</td>
+                <td>No DR</td>
+                <td>88%</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

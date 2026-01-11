@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/">Home</a>
+        <a href="/register">Register</a>
+    </div>
+</div>
+
+
+<!-- LOGIN CONTAINER -->
+<div class="container">
+
+    <h2>Login</h2>
+    <p class="subtitle">Access your dashboard</p>
+
+    <div class="form-box small-form">
+        <form action="/dashboard">
+
+            <label>Email</label>
+            <input type="email" required>
+
+            <label>Password</label>
+            <input type="password" required>
+
+            <button type="submit">Login</button>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

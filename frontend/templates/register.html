@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+    </div>
+</div>
+
+
+
+<!-- REGISTER CONTAINER -->
+<div class="container">
+
+    <h2>Register</h2>
+    <p class="subtitle">Create a new account</p>
+
+    <div class="form-box small-form">
+        <form action="/login">
+
+            <label>Name</label>
+            <input type="text" required>
+
+            <label>Email</label>
+            <input type="email" required>
+
+            <label>Password</label>
+            <input type="password" required>
+
+            <button type="submit">Register</button>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

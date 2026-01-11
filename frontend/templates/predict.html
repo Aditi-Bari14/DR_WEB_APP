@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Predict Diabetic Retinopathy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/login">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+  <h1>Predict Diabetic Retinopathy</h1>
+  <p class="subtitle">Upload retinal image and patient details</p>
+
+  <div class="form-box small-form">
+    <form action="/predict" method="POST" enctype="multipart/form-data">
+
+      <label>Retina Image</label>
+      <input type="file" name="image" required>
+
+      <label>Age</label>
+      <input type="number" name="age" required>
+
+      <label>HbA1c</label>
+      <input type="text" name="hba1c" required>
+
+      <button type="submit">Predict DR</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DR Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left">
+        <span class="logo">DR</span>
+        <span class="project-name">Diabetic Retinopathy</span>
+    </div>
+
+    <div class="nav-right">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        <a href="/dashboard" >Dashboard</a>
+    </div>
+</div>
+
+
+
+<!-- HERO SECTION -->
+<div class="hero">
+
+    <!-- LEFT CONTENT -->
+    <div class="hero-text">
+        <h1>Diabetic Retinopathy Detection</h1>
+        <p>
+            A multimodal deep learning system using CNN, GCN and ProtoPNet
+            to detect diabetic retinopathy from retinal images and patient metadata.
+
+            An explainable multimodal deep learning system for diabetic retinopathy detection using retinal images and patient metadata.
+        </p>
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="hero-image">
+        <img src="{{ url_for('static', filename='retina.png') }}" alt="Retina Image">
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p><strong>Diabetic Retinopathy Detection System</strong></p>
+    <p>Final Year BE Project | AI in Healthcare</p>
+    <p>Contact: dr-support@gmail.com</p>
+</div>
+
+</body>
+</html>

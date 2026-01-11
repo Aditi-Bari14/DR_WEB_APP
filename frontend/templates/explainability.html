@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Explainable AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/login">Logout</a>
+    </div>
+</div>
+
+<!-- EXPLAINABILITY CONTENT -->
+<div class="container">
+
+    <h2>Explainable AI (XAI)</h2>
+    <p class="subtitle">
+        Understanding how the model arrived at its prediction
+    </p>
+
+    <!-- PREDICTION SUMMARY -->
+    <div class="xai-box">
+        <h3>Prediction Summary</h3>
+        <p><b>Prediction:</b> Moderate Diabetic Retinopathy</p>
+        <p><b>Confidence:</b> 92%</p>
+        <p><b>Model Used:</b> CNN + GCN + ProtoPNet</p>
+    </div>
+
+    <!-- VISUAL EXPLANATION -->
+    <div class="xai-box">
+        <h3>Visual Explanation</h3>
+        <p>
+            The highlighted regions indicate areas of the retina
+            that contributed most to the prediction.
+        </p>
+
+        <div class="xai-images">
+            <div class="image-placeholder">Original Retina Image</div>
+            <div class="image-placeholder">Grad-CAM Heatmap</div>
+            <div class="image-placeholder">ProtoPNet Prototype</div>
+        </div>
+    </div>
+
+    <!-- TEXTUAL EXPLANATION -->
+    <div class="xai-box">
+        <h3>Model Interpretation</h3>
+        <p>
+            The CNN extracts visual features from the retinal image,
+            the GCN models relationships between clinical metadata,
+            and ProtoPNet compares the image with learned disease prototypes
+            to provide an interpretable decision.
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
