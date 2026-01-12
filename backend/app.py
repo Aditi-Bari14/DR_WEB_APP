@@ -1,31 +1,54 @@
 from flask import Flask, request, jsonify
+import requests
 import os
-
+import json
+from datetime import datetime
 app = Flask(__name__)
+ML_SERVICE_URL = "http://127.0.0.1:8000"
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-@app.route("/predict", methods=["POST"])
+@app.route("/api/history", methods=["GET"])
+def get_history():
+    try:
+        with open("history.json", "r") as f:
+            history = json.load(f)
+    except FileNotFoundError:
+        history = []
+
+    history = sorted(history, key=lambda x: x["date"], reverse=True)
+    return jsonify(history)
+
+history_record = {
+    "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    "prediction": result["prediction"],
+    "confidence": round(result["confidence"] * 100, 2)
+}
+# -------------------------
+# PREDICT (Frontend → Backend → ML)
+# -------------------------
+@app.route("/api/predict", methods=["POST"])
 def predict():
-    # 1. Get inputs
-    image = request.files["image"]
-    age = request.form["age"]
-    hba1c = request.form["hba1c"]
+    files = {"image": request.files["image"]}
+    data = request.form.to_dict()
 
-    # 2. Save image
-    image_path = os.path.join(UPLOAD_FOLDER, image.filename)
-    image.save(image_path)
+    response = requests.post(
+        f"{ML_SERVICE_URL}/predict",
+        files=files,
+        data=data
+    )
 
-    # 3. Dummy prediction (for now)
-    prediction = "Moderate Diabetic Retinopathy"
-    confidence = 0.92
+    return jsonify(response.json())
 
-    # 4. Return JSON
-    return jsonify({
-        "prediction": prediction,
-        "confidence": confidence
-    })
+# -------------------------
+# HISTORY (Frontend → Backend → ML)
+# -------------------------
+@app.route("/api/history", methods=["GET"])
+def get_history():
+    response = requests.get(f"{ML_SERVICE_URL}/history")
+    return jsonify(response.json())
+
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)

@@ -3,6 +3,7 @@ import requests
 import os
 
 app = Flask(__name__)
+BACKEND_URL = "http://127.0.0.1:5000"
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -33,40 +34,14 @@ def dashboard():
     return render_template("dashboard.html")
 
 # -------------------------
-# PREDICTION
-# -------------------------
-@app.route("/predict", methods=["POST"])
-def predict():
-    image = request.files["image"]
-    image_path = os.path.join(UPLOAD_FOLDER, image.filename)
-    image.save(image_path)
-
-    age = request.form["age"]
-    hba1c = request.form["hba1c"]
-
-    files = {"image": open(image_path, "rb")}
-    data = {"age": age, "hba1c": hba1c}
-
-    response = requests.post(
-        "http://127.0.0.1:8000/predict",
-        files=files,
-        data=data
-    )
-
-    result = response.json()
-
-    return render_template(
-        "result.html",
-        prediction=result["prediction"],
-        confidence=result["confidence"]
-    )
-
-# -------------------------
 # HISTORY
 # -------------------------
-@app.route("/history")
-def history():
-    return render_template("history.html")
+@app.route("/view-history")
+def view_history():
+    response = requests.get(f"{BACKEND_URL}/api/history")
+    history = response.json()
+    return render_template("history.html", history=history)
+
 
 # -------------------------
 # EXPLAINABILITY (XAI)
@@ -88,6 +63,35 @@ def admin():
 def predict_dr_page():
     return render_template("predict.html")
 
+# -------------------------
+# PREDICTION
+# -------------------------
+@app.route("/predict", methods=["POST"])
+def predict():
+    image = request.files["image"]
+    image_path = os.path.join(UPLOAD_FOLDER, image.filename)
+    image.save(image_path)
+
+    files = {"image": open(image_path, "rb")}
+    data = {
+        "age": request.form["age"],
+        "hba1c": request.form["hba1c"],
+        "glucose_values": request.form["glucose_values"]
+    }
+
+    response = requests.post(
+        f"{BACKEND_URL}/api/predict",
+        files=files,
+        data=data
+    )
+
+    result = response.json()
+
+    return render_template(
+        "result.html",
+        prediction=result["prediction"],
+        confidence=result["confidence"]
+    )
 
 if __name__ == "__main__":
     app.run(port=3000, debug=True)

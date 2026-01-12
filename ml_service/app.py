@@ -2,6 +2,8 @@
 from flask import Flask, request, jsonify
 import os
 from inference.predict import run_prediction  # real model inference
+import json
+from datetime import datetime
 
 # -------------------- Flask app setup --------------------
 app = Flask(__name__)
@@ -9,48 +11,23 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# -------------------- Routes --------------------
-# @app.route("/predict", methods=["POST"])
-# def predict():
-#     """
-#     Accepts:
-#         - image file
-#         - age
-#         - HbA1c
-#     Returns:
-#         - prediction (DR stage)
-#         - confidence (float)
-#     """
-#     # 1️⃣ Check if image is uploaded
-#     if "image" not in request.files:
-#         return jsonify({"error": "No image uploaded"}), 400
-
-#     image = request.files["image"]
-
-#     # 2️⃣ Save image to uploads folder
-#     image_path = os.path.join(UPLOAD_FOLDER, image.filename)
-#     image.save(image_path)
-
-#     # 3️⃣ Get metadata
-#     try:
-#         age = float(request.form.get("age"))
-#         hba1c = float(request.form.get("hba1c"))
-#         glucose_values = request.form["glucose_values"]
-#     except (TypeError, ValueError):
-#         return jsonify({"error": "Invalid or missing metadata"}), 400
-
-#     # 4️⃣ Call REAL model prediction
-#     # run_prediction expects image path/file and a list of tabular features
-#     result = run_prediction(image_path, age, hba1c, glucose_values)
-
-#     # 5️⃣ Return JSON response
-#     return jsonify(result)
+# 🔹 NEW: history file
+HISTORY_FILE = "history.json"
 
 
-# @app.route("/", methods=["GET"])
-# def home():
-#     """Optional route to check if service is running"""
-#     return jsonify({"message": "ML Service is running"}), 200
+# 🔹 NEW: helper function to save history
+def save_history(record):
+    try:
+        with open(HISTORY_FILE, "r") as f:
+            history = json.load(f)
+    except FileNotFoundError:
+        history = []
+
+    history.append(record)
+
+    with open(HISTORY_FILE, "w") as f:
+        json.dump(history, f, indent=4)
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -71,10 +48,35 @@ def predict():
     try:
         result = run_prediction(image_path, age, hba1c, glucose_values)
     except Exception as e:
-        # Catch model errors and return as JSON
         return jsonify({"error": f"Prediction failed: {e}"}), 500
 
+    # 🔹 NEW: save prediction history
+    history_record = {
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "image_name": image.filename,
+        "age": age,
+        "hba1c": hba1c,
+        "prediction": result["prediction"],
+        "confidence": round(result["confidence"] * 100, 2)
+    }
+
+    save_history(history_record)
+
     return jsonify(result)
+
+
+# 🔹 NEW: route to fetch history
+@app.route("/history", methods=["GET"])
+def get_history():
+    try:
+        with open(HISTORY_FILE, "r") as f:
+            history = json.load(f)
+    except FileNotFoundError:
+        history = []
+    # Optional: sort by date descending
+    history = sorted(history, key=lambda x: x["date"], reverse=True)
+    return jsonify(history)
+
 
 # -------------------- Main --------------------
 if __name__ == "__main__":
