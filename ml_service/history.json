@@ -1,42 +1,272 @@
 [
     {
-        "date": "2026-01-12 11:09:17",
-        "image_name": "PT_004996_R.jpg",
-        "age": 44.0,
-        "hba1c": 9.4,
-        "prediction": "No DR",
-        "confidence": 100.0
-    },
-    {
-        "date": "2026-01-12 11:10:01",
-        "image_name": "PT_004992_L (1).jpg",
-        "age": 76.0,
-        "hba1c": 7.2,
-        "prediction": "No DR",
-        "confidence": 89.63
-    },
-    {
-        "date": "2026-01-12 11:24:36",
-        "image_name": "PT_004983_R.jpg",
-        "age": 89.0,
-        "hba1c": 9.3,
-        "prediction": "Mild",
-        "confidence": 93.57
-    },
-    {
-        "date": "2026-01-12 11:38:06",
-        "image_name": "PT_004983_R.jpg",
-        "age": 89.0,
-        "hba1c": 9.3,
-        "prediction": "Mild",
-        "confidence": 93.57
-    },
-    {
-        "date": "2026-01-12 12:27:19",
+        "date": "2026-01-12 19:45:29",
         "image_name": "image",
-        "age": 65.0,
-        "hba1c": 7.2,
+        "age": 56.0,
+        "hba1c": 7.8,
         "prediction": "No DR",
-        "confidence": 100.0
+        "confidence": 100.0,
+        "patient_id": "PAT_0001"
+    },
+    {
+        "date": "2026-01-12 19:45:47",
+        "image_name": "image",
+        "age": 43.0,
+        "hba1c": 7.8,
+        "prediction": "No DR",
+        "confidence": 91.4,
+        "patient_id": "PAT_0002"
+    },
+    {
+        "date": "2026-01-12 19:47:14",
+        "image_name": "image",
+        "age": 44.0,
+        "hba1c": 6.9,
+        "prediction": "Mild",
+        "confidence": 92.61,
+        "patient_id": "PAT_0003"
+    },
+    {
+        "date": "2026-01-12 19:53:46",
+        "image_name": "image",
+        "age": 76.0,
+        "hba1c": 8.3,
+        "prediction": "No DR",
+        "confidence": 99.85,
+        "patient_id": "PAT_0004"
+    },
+    {
+        "date": "2026-01-12 21:34:09",
+        "image_name": "image",
+        "age": 87.0,
+        "hba1c": 6.9,
+        "prediction": "No DR",
+        "confidence": 89.4,
+        "patient_id": "PAT_0005"
+    },
+    {
+        "date": "2026-01-12 22:00:58",
+        "image_name": "image",
+        "age": 90.0,
+        "hba1c": 8.4,
+        "prediction": "No DR",
+        "confidence": 89.32,
+        "patient_id": "PAT_0006"
+    },
+    {
+        "date": "2026-01-12 22:04:21",
+        "image_name": "image",
+        "age": 90.0,
+        "hba1c": 8.4,
+        "prediction": "No DR",
+        "confidence": 89.32,
+        "patient_id": "PAT_0007"
+    },
+    {
+        "date": "2026-01-13 11:43:11",
+        "image_name": "image",
+        "prototype_image": "prototype_placeholder.png",
+        "gradcam_image": "gradcam_placeholder.png",
+        "age": 8.0,
+        "hba1c": 9.3,
+        "prediction": "Mild",
+        "confidence": 83.36,
+        "patient_id": "PAT_0008"
+    },
+    {
+        "date": "2026-01-14 10:12:45",
+        "image_name": "image",
+        "gradcam_image": null,
+        "prototype_image": null,
+        "age": 63.0,
+        "hba1c": 8.4,
+        "prediction": "Mild",
+        "confidence": 99.03,
+        "patient_id": "PAT_0009"
+    },
+    {
+        "date": "2026-01-14 17:47:25",
+        "image_name": "image",
+        "gradcam_image": "gradcam_image",
+        "prototype_image": null,
+        "age": 65.0,
+        "hba1c": 3.4,
+        "prediction": "No DR",
+        "confidence": 91.68,
+        "patient_id": "PAT_0010"
+    },
+    {
+        "date": "2026-01-14 17:47:40",
+        "image_name": "image",
+        "gradcam_image": "gradcam_image",
+        "prototype_image": null,
+        "age": 65.0,
+        "hba1c": 8.4,
+        "prediction": "Mild",
+        "confidence": 93.82,
+        "patient_id": "PAT_0011"
+    },
+    {
+        "date": "2026-01-14 18:01:22",
+        "image_name": "image",
+        "gradcam_image": "gradcam_image",
+        "prototype_image": null,
+        "age": 5.0,
+        "hba1c": 7.4,
+        "prediction": "Mild",
+        "confidence": 77.73,
+        "patient_id": "PAT_0012"
+    },
+    {
+        "date": "2026-01-14 18:10:45",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_1768394445.43811.jpg",
+        "prototype_image": null,
+        "age": 3.0,
+        "hba1c": 3.6,
+        "prediction": "No DR",
+        "confidence": 99.85,
+        "patient_id": "PAT_0013"
+    },
+    {
+        "date": "2026-01-14 20:58:38",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_1768404518.134103.jpg",
+        "prototype_image": null,
+        "age": 2.0,
+        "hba1c": 7.4,
+        "prediction": "Mild",
+        "confidence": 51.83,
+        "patient_id": "PAT_0014"
+    },
+    {
+        "date": "2026-01-14 22:28:07",
+        "image_name": "image",
+        "gradcam_image": null,
+        "age": 65.0,
+        "hba1c": 8.4,
+        "prediction": "No DR",
+        "confidence": 90.08,
+        "patient_id": "PAT_0015"
+    },
+    {
+        "date": "2026-01-14 22:32:58",
+        "image_name": "image",
+        "gradcam_image": null,
+        "age": 65.0,
+        "hba1c": 8.4,
+        "prediction": "No DR",
+        "confidence": 90.08,
+        "patient_id": "PAT_0016"
+    },
+    {
+        "patient_id": "PAT_0017",
+        "date": "2026-01-15 09:36:56",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0017.jpg",
+        "prototype_image": null,
+        "age": 28.0,
+        "hba1c": 6.4,
+        "prediction": "Mild",
+        "confidence": 47.48
+    },
+    {
+        "patient_id": "PAT_0018",
+        "date": "2026-01-15 11:13:09",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0018.jpg",
+        "prototype_image": null,
+        "age": 28.0,
+        "hba1c": 6.4,
+        "prediction": "Mild",
+        "confidence": 47.48
+    },
+    {
+        "patient_id": "PAT_0019",
+        "date": "2026-01-15 11:13:37",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0019.jpg",
+        "prototype_image": null,
+        "age": 28.0,
+        "hba1c": 6.4,
+        "prediction": "Mild",
+        "confidence": 47.48
+    },
+    {
+        "patient_id": "PAT_0020",
+        "date": "2026-01-15 11:13:41",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0020.jpg",
+        "prototype_image": null,
+        "age": 28.0,
+        "hba1c": 6.4,
+        "prediction": "Mild",
+        "confidence": 47.48
+    },
+    {
+        "patient_id": "PAT_0021",
+        "date": "2026-01-15 11:14:01",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0021.jpg",
+        "prototype_image": null,
+        "age": 74.0,
+        "hba1c": 6.4,
+        "prediction": "Moderate",
+        "confidence": 65.6
+    },
+    {
+        "patient_id": "PAT_0022",
+        "date": "2026-01-15 11:16:00",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0022.jpg",
+        "prototype_image": null,
+        "age": 92.0,
+        "hba1c": 4.9,
+        "prediction": "No DR",
+        "confidence": 89.4
+    },
+    {
+        "patient_id": "PAT_0023",
+        "date": "2026-01-15 11:17:15",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0023.jpg",
+        "prototype_image": null,
+        "age": 75.0,
+        "hba1c": 8.4,
+        "prediction": "No DR",
+        "confidence": 89.64
+    },
+    {
+        "patient_id": "PAT_0024",
+        "date": "2026-01-15 11:46:53",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0024.jpg",
+        "prototype_image": null,
+        "age": 9.0,
+        "hba1c": 2.9,
+        "prediction": "Mild",
+        "confidence": 76.45
+    },
+    {
+        "patient_id": "PAT_0025",
+        "date": "2026-01-15 17:43:49",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0025.jpg",
+        "prototype_image": null,
+        "age": 90.0,
+        "hba1c": 4.0,
+        "prediction": "Moderate",
+        "confidence": 66.68
+    },
+    {
+        "patient_id": "PAT_0026",
+        "date": "2026-01-16 08:33:49",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0026.jpg",
+        "prototype_image": null,
+        "age": 73.0,
+        "hba1c": 8.4,
+        "prediction": "Mild",
+        "confidence": 50.67
     }
 ]

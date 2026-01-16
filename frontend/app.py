@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import requests
 import os
 
 app = Flask(__name__)
+
 BACKEND_URL = "http://127.0.0.1:5000"
+ML_SERVICE_URL = "http://127.0.0.1:8000"  # ✅ NEW
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -42,15 +44,12 @@ def view_history():
     history = response.json()
     return render_template("history.html", history=history)
 
-
 # -------------------------
-# EXPLAINABILITY (XAI)
+# EXPLAINABILITY
 # -------------------------
 @app.route("/explainability")
 def explainability():
     return render_template("explainability.html")
-
-# <!-- Change made on Aditi branch -->
 
 # -------------------------
 # ADMIN
@@ -85,12 +84,38 @@ def predict():
         data=data
     )
 
+    if response.status_code != 200:
+        return f"Backend error: {response.text}", 500
+
     result = response.json()
+
+    if "error" in result:
+        return f"Prediction failed: {result['error']}", 500
 
     return render_template(
         "result.html",
         prediction=result["prediction"],
         confidence=result["confidence"]
+    )
+
+# -------------------------
+# EXPLAIN (VIEW BUTTON)
+# -------------------------
+@app.route("/explain/<patient_id>")
+def explain(patient_id):
+    response = requests.get(f"{BACKEND_URL}/api/history")
+    history = response.json()
+
+    record = next(r for r in history if r["patient_id"] == patient_id)
+
+    gradcam_url = None
+    if record.get("gradcam_image"):
+        gradcam_url = ML_SERVICE_URL + record["gradcam_image"]
+
+    return render_template(
+        "explainability.html",
+        record=record,
+        gradcam_image=gradcam_url
     )
 
 if __name__ == "__main__":

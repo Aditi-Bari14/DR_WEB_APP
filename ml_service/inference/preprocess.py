@@ -23,9 +23,11 @@ def preprocess(image_file, tabular_raw, device="cpu"):
         image_tensor, tabular_tensor
     """
 
-    # --- 1. Preprocess image ---
+   # --- 1. Preprocess image ---
     image = Image.open(image_file).convert("RGB")
     image_tensor = image_transform(image).unsqueeze(0).to(device)
+
+
 
     # --- 2. Preprocess tabular data ---
     # Extract raw inputs

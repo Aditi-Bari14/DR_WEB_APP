@@ -8,10 +8,11 @@
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <div class="nav-left"></div>
+    <div class="nav-left">
+    </div>
     <div class="nav-right">
         <a href="/dashboard">Dashboard</a>
-        <a href="/history">History</a>
+        <a href="/view-history">History</a>
         <a href="/login">Logout</a>
     </div>
 </div>
@@ -27,35 +28,70 @@
     <!-- PREDICTION SUMMARY -->
     <div class="xai-box">
         <h3>Prediction Summary</h3>
-        <p><b>Prediction:</b> Moderate Diabetic Retinopathy</p>
-        <p><b>Confidence:</b> 92%</p>
-        <p><b>Model Used:</b> CNN + GCN + ProtoPNet</p>
+        <p><b>Patient ID:</b> {{ record.patient_id }}</p>
+        <p><b>Prediction:</b> {{ record.prediction }}</p>
+        <p><b>Confidence:</b> {{ record.confidence }}%</p>
+        <p><b>Date:</b> {{ record.date }}</p>
+
     </div>
 
     <!-- VISUAL EXPLANATION -->
-    <div class="xai-box">
-        <h3>Visual Explanation</h3>
-        <p>
-            The highlighted regions indicate areas of the retina
-            that contributed most to the prediction.
-        </p>
+    <!-- VISUAL EXPLANATION -->
+<div class="xai-box">
+    <h3>Visual Explanation</h3>
+    <p>
+        The highlighted regions indicate areas of the retina
+        that contributed most to the prediction.
+    </p>
 
-        <div class="xai-images">
-            <div class="image-placeholder">Original Retina Image</div>
-            <div class="image-placeholder">Grad-CAM Heatmap</div>
-            <div class="image-placeholder">ProtoPNet Prototype</div>
+    <div class="xai-images">
+
+        <!-- ORIGINAL IMAGE -->
+        <div class="xai-image-box">
+            <p class="img-title">Original Retina Image</p>
+            <img
+                src="http://127.0.0.1:8000/uploads/{{ record.image_name }}"
+                class="xai-img"
+                alt="Original Retina Image">
         </div>
+
+        <!-- GRAD-CAM -->
+        <div class="xai-image-box">
+            <p class="img-title">Grad-CAM Heatmap</p>
+
+            {% if gradcam_image %}
+                <img src="{{ gradcam_image }}" class="img-fluid">
+            {% else %}
+                <div class="placeholder">Not Available</div>
+            {% endif %}
+
+
+        <!-- PROTOTYPE (EMPTY FOR NOW) -->
+        <div class="xai-image-box">
+            <p class="img-title">Prototype Similarity</p>
+            <div class="image-placeholder">
+                Not Implemented
+            </div>
+        </div>
+
     </div>
+</div>
+
 
     <!-- TEXTUAL EXPLANATION -->
     <div class="xai-box">
         <h3>Model Interpretation</h3>
         <p>
-            The CNN extracts visual features from the retinal image,
-            the GCN models relationships between clinical metadata,
-            and ProtoPNet compares the image with learned disease prototypes
-            to provide an interpretable decision.
+            The model combines retinal image features extracted by the CNN,
+            clinical attributes (Age, HbA1c, glucose statistics) modeled via GCN,
+            and prototype similarity learning to provide an interpretable
+            Diabetic Retinopathy stage prediction.
         </p>
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div style="margin-top: 20px;">
+        <a href="/view-history" class="btn-primary">← Back to History</a>
     </div>
 
 </div>

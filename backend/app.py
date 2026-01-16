@@ -1,8 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 import os
-import json
-from datetime import datetime
+
 app = Flask(__name__)
 ML_SERVICE_URL = "http://127.0.0.1:8000"
 
@@ -23,14 +22,33 @@ def predict():
         data=data
     )
 
-    return jsonify(response.json())
+    # ✅ HANDLE ML ERRORS SAFELY
+    if response.status_code != 200:
+        return jsonify({
+            "error": "ML service failed",
+            "details": response.text
+        }), 500
+
+    # ✅ SAFE JSON PARSE
+    try:
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({
+            "error": "Invalid JSON from ML service",
+            "details": str(e)
+        }), 500
+
 
 # -------------------------
-# HISTORY (Frontend → Backend → ML)
+# HISTORY
 # -------------------------
 @app.route("/api/history", methods=["GET"])
 def get_history():
     response = requests.get(f"{ML_SERVICE_URL}/history")
+
+    if response.status_code != 200:
+        return jsonify([])
+
     return jsonify(response.json())
 
 

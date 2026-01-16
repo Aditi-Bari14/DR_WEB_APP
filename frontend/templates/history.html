@@ -1,28 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Prediction History</title>
+    <title>Patient Prediction History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8fc;
+            margin: 0;
+        }
+
+        .navbar {
+            background: #1e3a8a;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+          
+
+        .container {
+            width: 90%;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
+
         th {
-            background-color: #f2f2f2;
+            background: #e6f0ff;
+            color: #0a4da3;
+            padding: 12px;
+            border: 1px solid #ddd;
         }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .view-btn {
+            background: #1e3a8a;
+            color: white;
+            padding: 6px 14px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .view-btn:hover {
+            background: rgb(172, 196, 234);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            background: #1e3a8a;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-btn {
+            background-color: #1e3a8a;  /* Blue */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        /* Hover effect */
+        .back-btn:hover {
+            background-color: rgb(172, 196, 234);   /* Slightly lighter blue */
+            transform: translateY(-2px);
+        }
+
     </style>
 </head>
 <body>
 
-<h2>Patient Prediction History</h2>
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/predict-dr">Predict</a>
+        <a href="/login">Logout</a>
+    </div>
+</div>
 
-<table>
-    <thead>
+<div class="container">
+    <h2>Patient Prediction History</h2>
+
+    <table>
         <tr>
             <th>Date & Time</th>
             <th>Patient ID</th>
@@ -30,22 +122,22 @@
             <th>Confidence (%)</th>
             <th>Action</th>
         </tr>
-    </thead>
-    <tbody>
-        {% for item in history %}
+
+        {% for row in history %}
         <tr>
-            <td>{{ item.date }}</td>
-            <td>{{ item.patient_id }}</td>
-            <td>{{ item.prediction }}</td>
-            <td>{{ item.confidence }}</td>
-            <td>View</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.patient_id }}</td>
+            <td>{{ row.prediction }}</td>
+            <td>{{ row.confidence }}</td>
+            <td>
+                <a class="view-btn" href="/explain/{{ row.patient_id }}">View</a>
+            </td>
         </tr>
         {% endfor %}
-    </tbody>
-</table>
+    </table>
 
-<br>
-<a href="/predict">← Predict Another</a>
+    <a class="back-btn" href="/predict-dr">← Predict Another</a>
+</div>
 
 </body>
 </html>
