@@ -268,5 +268,157 @@
         "hba1c": 8.4,
         "prediction": "Mild",
         "confidence": 50.67
+    },
+    {
+        "patient_id": "PAT_0027",
+        "date": "2026-01-16 22:25:02",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0027.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_1768582502.629645.jpg",
+        "age": 74.0,
+        "hba1c": 9.4,
+        "prediction": "Mild",
+        "confidence": 91.91
+    },
+    {
+        "patient_id": "PAT_0028",
+        "date": "2026-01-16 23:02:01",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0028.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_1768584721.113624.jpg",
+        "age": 50.0,
+        "hba1c": 2.9,
+        "prediction": "Mild",
+        "confidence": 92.5,
+        "lesion_report": {
+            "stage": "Mild DR",
+            "lesions": [
+                "Possible presence of microaneurysms",
+                "No significant hemorrhages",
+                "Minimal retinal damage"
+            ]
+        }
+    },
+    {
+        "patient_id": "PAT_0029",
+        "date": "2026-01-17 10:10:48",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0029.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0029.jpg",
+        "age": 41.0,
+        "hba1c": 3.0,
+        "prediction": "No DR",
+        "confidence": 99.85,
+        "lesion_report": {
+            "stage": "No DR",
+            "lesions": [
+                "No visible microaneurysms",
+                "No hemorrhages detected",
+                "No exudates observed"
+            ]
+        }
+    },
+    {
+        "patient_id": "PAT_0030",
+        "date": "2026-01-17 10:49:52",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0030.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0030.jpg",
+        "age": 21.0,
+        "hba1c": 1.0,
+        "prediction": "Moderate",
+        "confidence": 46.61,
+        "lesion_report": {
+            "stage": "Moderate DR",
+            "lesions": [
+                "Microaneurysms likely present",
+                "Possible hemorrhages",
+                "Hard exudates may be present"
+            ]
+        }
+    },
+    {
+        "patient_id": "PAT_0031",
+        "date": "2026-01-17 11:34:53",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0031.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0031.jpg",
+        "age": 51.0,
+        "hba1c": 3.0,
+        "prediction": "Mild",
+        "confidence": 95.81,
+        "lesion_report": {
+            "stage": "Mild DR",
+            "lesions": [
+                "Possible presence of microaneurysms",
+                "No significant hemorrhages",
+                "Minimal retinal damage"
+            ]
+        }
+    },
+    {
+        "patient_id": "PAT_0032",
+        "date": "2026-01-17 12:16:49",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0032.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0032.jpg",
+        "age": 42.0,
+        "hba1c": 2.9,
+        "prediction_class": 1,
+        "prediction": "Mild DR",
+        "confidence": 76.66,
+        "lesion_report": "Mild DR: Possible presence of microaneurysms, No significant hemorrhages, Minimal retinal damage"
+    },
+    {
+        "patient_id": "PAT_0033",
+        "date": "2026-01-17 12:45:25",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0033.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0033.jpg",
+        "age": 43.0,
+        "hba1c": 1.9,
+        "prediction_class": 1,
+        "prediction": "Mild DR",
+        "confidence": 93.58,
+        "lesion_report": "Mild DR: Possible presence of microaneurysms, No significant hemorrhages, Minimal retinal damage"
+    },
+    {
+        "patient_id": "PAT_0034",
+        "date": "2026-01-17 18:17:47",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0034.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0034.jpg",
+        "age": 65.0,
+        "hba1c": 1.0,
+        "prediction_class": 1,
+        "prediction": "Mild DR",
+        "confidence": 95.47,
+        "lesion_report": "Mild DR: Possible presence of microaneurysms, No significant hemorrhages, Minimal retinal damage"
+    },
+    {
+        "patient_id": "PAT_0035",
+        "date": "2026-01-17 19:06:31",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0035.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0035.jpg",
+        "age": 75.0,
+        "hba1c": 7.0,
+        "prediction_class": 3,
+        "prediction": "Severe DR",
+        "confidence": 54.72,
+        "lesion_report": "Severe DR: Multiple hemorrhages likely, Cotton wool spots possible, Extensive retinal damage"
+    },
+    {
+        "patient_id": "PAT_0036",
+        "date": "2026-01-17 19:07:57",
+        "image_name": "image",
+        "gradcam_image": "/static/gradcam/gradcam_PAT_0036.jpg",
+        "prototype_image": "/static/prototype_similarity/prototype_PAT_0036.jpg",
+        "age": 87.0,
+        "hba1c": 8.0,
+        "prediction_class": 4,
+        "prediction": "Proliferative DR",
+        "confidence": 99.2,
+        "lesion_report": "Proliferative DR: High probability of neovascularization, Severe hemorrhages detected, High risk of vision loss"
     }
 ]

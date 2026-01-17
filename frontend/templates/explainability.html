@@ -8,8 +8,7 @@
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <div class="nav-left">
-    </div>
+    <div class="nav-left"></div>
     <div class="nav-right">
         <a href="/dashboard">Dashboard</a>
         <a href="/view-history">History</a>
@@ -32,62 +31,79 @@
         <p><b>Prediction:</b> {{ record.prediction }}</p>
         <p><b>Confidence:</b> {{ record.confidence }}%</p>
         <p><b>Date:</b> {{ record.date }}</p>
-
     </div>
 
     <!-- VISUAL EXPLANATION -->
-    <!-- VISUAL EXPLANATION -->
-<div class="xai-box">
-    <h3>Visual Explanation</h3>
-    <p>
-        The highlighted regions indicate areas of the retina
-        that contributed most to the prediction.
-    </p>
-
-    <div class="xai-images">
-
-        <!-- ORIGINAL IMAGE -->
-        <div class="xai-image-box">
-            <p class="img-title">Original Retina Image</p>
-            <img
-                src="http://127.0.0.1:8000/uploads/{{ record.image_name }}"
-                class="xai-img"
-                alt="Original Retina Image">
-        </div>
-
-        <!-- GRAD-CAM -->
-        <div class="xai-image-box">
-            <p class="img-title">Grad-CAM Heatmap</p>
-
-            {% if gradcam_image %}
-                <img src="{{ gradcam_image }}" class="img-fluid">
-            {% else %}
-                <div class="placeholder">Not Available</div>
-            {% endif %}
-
-
-        <!-- PROTOTYPE (EMPTY FOR NOW) -->
-        <div class="xai-image-box">
-            <p class="img-title">Prototype Similarity</p>
-            <div class="image-placeholder">
-                Not Implemented
-            </div>
-        </div>
-
-    </div>
-</div>
-
-
-    <!-- TEXTUAL EXPLANATION -->
     <div class="xai-box">
-        <h3>Model Interpretation</h3>
+        <h3>Visual Explanation</h3>
         <p>
-            The model combines retinal image features extracted by the CNN,
-            clinical attributes (Age, HbA1c, glucose statistics) modeled via GCN,
-            and prototype similarity learning to provide an interpretable
-            Diabetic Retinopathy stage prediction.
+            The highlighted regions indicate areas of the retina
+            that contributed most to the prediction.
         </p>
+
+        <!-- IMAGE ROW -->
+        <div class="xai-images">
+
+            <!-- ORIGINAL IMAGE -->
+            <div class="xai-image-box">
+                <p class="img-title">Original Retina Image</p>
+                <img
+                    src="http://127.0.0.1:8000/uploads/{{ record.image_name }}"
+                    class="xai-img"
+                    alt="Original Retina Image">
+            </div>
+
+            <!-- GRAD-CAM -->
+            <div class="xai-image-box">
+                <p class="img-title">Grad-CAM Heatmap</p>
+                {% if gradcam_image %}
+                    <img src="{{ gradcam_image }}" class="xai-img">
+                {% else %}
+                    <div class="placeholder">Not Available</div>
+                {% endif %}
+            </div>
+
+            <!-- PROTOTYPE SIMILARITY -->
+            <div class="xai-image-box">
+                <p class="img-title">Prototype Similarity</p>
+                {% if prototype_image %}
+                    <img
+                        src="http://127.0.0.1:8000{{ prototype_image }}"
+                        class="xai-img"
+                        alt="Prototype Similarity Image">
+                {% else %}
+                    <div class="placeholder">Not Available</div>
+                {% endif %}
+            </div>
+
+        </div>
     </div>
+
+ <!-- CLINICAL INTERPRETATION -->
+<div class="xai-box">
+    <h3>Clinical Interpretation (Lesion-based)</h3>
+
+    {% if clinical_data %}
+    <div class="clinical-card">
+
+        <p><b>Diagnosis:</b> {{ clinical_data.diagnosis }}</p>
+
+        <p>
+            <b>Key Findings:</b>
+            {% for item in clinical_data.findings %}
+                <span style="margin-left: 8px;">• {{ item }}</span>
+            {% endfor %}
+        </p>
+
+        <p><b>Clinical Meaning:</b> {{ clinical_data.meaning }}</p>
+
+        <p><b>Recommendation:</b> {{ clinical_data.recommendation }}</p>
+
+    </div>
+    {% else %}
+        <p>Clinical interpretation not available.</p>
+    {% endif %}
+</div>
 
     <!-- BACK BUTTON -->
     <div style="margin-top: 20px;">

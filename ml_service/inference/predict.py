@@ -5,6 +5,7 @@ import os
 
 from inference.load_models import load_model
 from inference.preprocess import preprocess
+from inference.lesion_explanation import generate_lesion_text
 
 # -------------------- Setup --------------------
 device = "cpu"
@@ -61,32 +62,44 @@ def run_prediction(image_path, age, hba1c, glucose_values):
     probs = torch.softmax(logits, dim=1)
     confidence, pred_class = torch.max(probs, dim=1)
 
-    # 🔹 Save for Grad-CAM (used later in ml_service)
-    _last_image_tensor = image_tensor
-    _last_predicted_class = pred_class.item()
+    predicted_class = int(pred_class.item())
 
     # -----------------------------
-    # 3. Prepare response
+    # 3. Lesion-based explanation
+    # -----------------------------
+    lesion_report = generate_lesion_text(predicted_class)
+
+    # 🔹 Save for Grad-CAM
+    _last_image_tensor = image_tensor
+    _last_predicted_class = predicted_class
+
+    # -----------------------------
+    # 4. Class mapping (IMPORTANT)
     # -----------------------------
     class_mapping = {
         0: "No DR",
-        1: "Mild",
-        2: "Moderate",
-        3: "Severe",
+        1: "Mild DR",
+        2: "Moderate DR",
+        3: "Severe DR",
         4: "Proliferative DR"
     }
 
+    # -----------------------------
+    # 5. Prepare response (FINAL FIX)
+    # -----------------------------
     return {
-        "prediction": class_mapping[int(pred_class.item())],
+        "prediction_class": predicted_class,              # ✅ INTEGER (0–4)
+        "prediction": class_mapping[predicted_class],     # ✅ STRING
         "confidence": float(confidence.item()),
-        "gradcam_image": None,      # generated in ml_service
-        "prototype_image": None
+        "gradcam_image": None,        # generated later
+        "prototype_image": None,      # generated later
+        "lesion_report": lesion_report
     }
 
 
 # -------------------- Grad-CAM Helper --------------------
 def get_last_image_tensor_and_class():
     """
-    Used by ml_service/app.py for Grad-CAM generation
+    Used by app.py for Grad-CAM generation
     """
     return _last_image_tensor, _last_predicted_class
