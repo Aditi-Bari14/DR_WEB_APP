@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient {{ patient_id }} History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+         <h1>Patient {{ patient_id }} History</h1>
+    <a href="/view-history" class="back-link">← Back to All Patients</a>
+
+    {% if plot_img %}
+    <div class="plot">
+        <h2>Trend of DR Severity</h2>
+        <img src="data:image/png;base64,{{ plot_img }}" alt="Patient History Plot">
+    </div>
+    {% endif %}
+
+        {% if history %}
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Prediction</th>
+                    <th>Confidence (%)</th>
+                    <th>Age</th>
+                    <th>HbA1c</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in history %}
+                <tr>
+                    <td>{{ record.date }}</td>
+                    <td>{{ record.prediction }}</td>
+                    <td>{{ record.confidence }}</td>
+                    <td>{{ record.age }}</td>
+                    <td>{{ record.hba1c }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-history">No history found for this patient.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

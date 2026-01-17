@@ -1,12 +1,15 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Explainable AI</title>
+    <meta charset="UTF-8">
+    <title>Explainability – DR Prediction</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <!-- NAVBAR -->
+
 <div class="navbar">
     <div class="nav-left"></div>
     <div class="nav-right">
@@ -15,47 +18,92 @@
         <a href="/login">Logout</a>
     </div>
 </div>
-
-<!-- EXPLAINABILITY CONTENT -->
+<!-- MAIN CONTAINER -->
 <div class="container">
 
-    <h2>Explainable AI (XAI)</h2>
+    <h1>Model Explainability</h1>
     <p class="subtitle">
-        Understanding how the model arrived at its prediction
+        This section explains <strong>why</strong> the AI model predicted the given
+        Diabetic Retinopathy stage.
     </p>
 
-    <!-- PREDICTION SUMMARY -->
+    <!-- GRAD-CAM SECTION -->
     <div class="xai-box">
-        <h3>Prediction Summary</h3>
-        <p><b>Prediction:</b> Moderate Diabetic Retinopathy</p>
-        <p><b>Confidence:</b> 92%</p>
-        <p><b>Model Used:</b> CNN + GCN + ProtoPNet</p>
-    </div>
-
-    <!-- VISUAL EXPLANATION -->
-    <div class="xai-box">
-        <h3>Visual Explanation</h3>
-        <p>
-            The highlighted regions indicate areas of the retina
-            that contributed most to the prediction.
-        </p>
+        <h3> Image-based Explanation (Grad-CAM)</h3>
 
         <div class="xai-images">
-            <div class="image-placeholder">Original Retina Image</div>
-            <div class="image-placeholder">Grad-CAM Heatmap</div>
-            <div class="image-placeholder">ProtoPNet Prototype</div>
+            <div class="image-placeholder">
+    Original Retina Image
+    <br>
+    <img src="/uploads/{{ patient_id }}_original.png" width="300">
+</div>
+           <div class="image-placeholder">
+    Grad-CAM Heatmap
+    <br>
+    {% if cam_image %}
+        <img src="{{ url_for('static', filename=cam_image.split('static/')[-1]) }}" width="300">
+    {% else %}
+        No image available
+    {% endif %}
+</div>
         </div>
+
+        <p class="subtitle" style="margin-top:15px;">
+            Highlighted regions show the retinal areas that influenced the
+            model’s decision most.
+        </p>
     </div>
 
-    <!-- TEXTUAL EXPLANATION -->
+    <!-- PROTOTYPE EXPLANATION -->
     <div class="xai-box">
-        <h3>Model Interpretation</h3>
-        <p>
-            The CNN extracts visual features from the retinal image,
-            the GCN models relationships between clinical metadata,
-            and ProtoPNet compares the image with learned disease prototypes
-            to provide an interpretable decision.
+        <h3> Prototype-based Reasoning</h3>
+
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Prototype ID</th>
+                    <th>Similarity Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for proto, score in zip(proto_ids, proto_scores) %}
+                <tr>
+                    <td>Prototype {{ proto }}</td>
+                    <td>{{ "%.3f"|format(score) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="subtitle" style="margin-top:15px;">
+            Higher similarity indicates closer matching with learned disease patterns.
         </p>
+    </div>
+
+    <!-- TABULAR CONTRIBUTION -->
+    <div class="xai-box">
+        <h3> Clinical Feature Contribution</h3>
+
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Age</td><td>{{ age }}</td></tr>
+                <tr><td>HbA1c</td><td>{{ hba1c }}</td></tr>
+                <tr><td>Glucose Mean</td><td>{{ glucose_mean }}</td></tr>
+                <tr><td>Glucose Std</td><td>{{ glucose_std }}</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div style="margin-top:30px;">
+        <a href="/view-history" class="nav-link-btn">← Back to History</a>
+        <a href="/dashboard" class="nav-link-btn">Dashboard</a>
     </div>
 
 </div>

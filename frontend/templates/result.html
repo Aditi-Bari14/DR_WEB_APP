@@ -9,15 +9,6 @@
 </head>
 <body>
 
-<!-- <div class="navbar">
-<div class="nav-left"></div>
-    <div class="nav-right">
-    <a href="/dashboard" class="nav-link-btn">Dashboard</a>
-    <a href="/history" class="nav-link-btn">History</a>
-    <a href="/predict-dr" class="nav-link-btn">New Prediction</a>
-    <a href="/" class="nav-link-btn">Logout</a>
-  </div>
-</div> -->
 <div class="navbar">
     <div class="nav-left"></div>
     <div class="nav-right">
@@ -40,7 +31,8 @@
 
     <div style="margin-top: 25px;">
       <a href="/predict-dr" class="nav-link-btn">Predict Another</a>
-      <a href="/view-history" class="nav-link-btn">View History</a>
+      <a href="/patient/{{patient_id}}" class="nav-link-btn">View History</a>
+      <a href="{{ url_for('explain_page', patient_id=patient_id) }}" class="nav-link-btn">Explain</a>
     </div>
   </div>
 </div>

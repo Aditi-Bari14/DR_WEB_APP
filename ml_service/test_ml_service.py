@@ -12,12 +12,13 @@ with open(image_path, "rb") as img_file:
 
     # 4️⃣ Tabular features: must match model input order and length (6 features)
     data = {
+        "patient_id":1,
         "age": 54,             # integer
         "hba1c_latest": 7.2,   # float
-        "glucose_mean": 120.0, # float
-        "glucose_std": 10.0,   # float
-        "glucose_min": 100.0,  # float
-        "glucose_max": 140.0   # float
+        "glucose_mean": 120.0,
+        "glucose_std": 10.0,
+        "glucose_min": 100.0,
+        "glucose_max": 140.0
     }
 
     # 5️⃣ Make POST request

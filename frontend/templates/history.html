@@ -38,14 +38,14 @@
             <td>{{ item.patient_id }}</td>
             <td>{{ item.prediction }}</td>
             <td>{{ item.confidence }}</td>
-            <td>View</td>
+            <td><a href="/patient/{{item.patient_id}}">View History</a></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
 <br>
-<a href="/predict">← Predict Another</a>
+<a href="/predict-dr">← Predict Another</a>
 
 </body>
 </html>

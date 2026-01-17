@@ -1,42 +1,20 @@
 [
     {
-        "date": "2026-01-12 11:09:17",
-        "image_name": "PT_004996_R.jpg",
-        "age": 44.0,
-        "hba1c": 9.4,
-        "prediction": "No DR",
-        "confidence": 100.0
-    },
-    {
-        "date": "2026-01-12 11:10:01",
-        "image_name": "PT_004992_L (1).jpg",
-        "age": 76.0,
-        "hba1c": 7.2,
-        "prediction": "No DR",
-        "confidence": 89.63
-    },
-    {
-        "date": "2026-01-12 11:24:36",
-        "image_name": "PT_004983_R.jpg",
-        "age": 89.0,
-        "hba1c": 9.3,
-        "prediction": "Mild",
-        "confidence": 93.57
-    },
-    {
-        "date": "2026-01-12 11:38:06",
-        "image_name": "PT_004983_R.jpg",
-        "age": 89.0,
-        "hba1c": 9.3,
-        "prediction": "Mild",
-        "confidence": 93.57
-    },
-    {
-        "date": "2026-01-12 12:27:19",
+        "patient_id": "1",
+        "date": "2026-01-14 11:40:07",
         "image_name": "image",
-        "age": 65.0,
-        "hba1c": 7.2,
+        "age": 60.0,
+        "hba1c": 7.5,
+        "prediction": "Mild",
+        "confidence": 93.46
+    },
+    {
+        "patient_id": "2",
+        "date": "2026-01-14 11:50:33",
+        "image_name": "image",
+        "age": 70.0,
+        "hba1c": 7.5,
         "prediction": "No DR",
-        "confidence": 100.0
+        "confidence": 55.54
     }
 ]

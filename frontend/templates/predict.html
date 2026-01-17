@@ -26,14 +26,20 @@
       <label>Retina Image</label>
       <input type="file" name="image" required>
 
+      <label>Patient ID</label>
+<input type="number" name="patient_id" required>
+
+
+
       <label>Age</label>
       <input type="number" name="age" required>
 
       <label>HbA1c</label>
       <input type="text" name="hba1c" required>
-    
-      <label>Glucose readings (comma-separated):</label>
+      
+       <label>Glucose readings (comma-separated):</label>
       <input type="text" name="glucose_values" placeholder="100,110,120,115" required><br><br>
+ 
 
       <button type="submit">Predict DR</button>
     </form>
