@@ -14,3 +14,16 @@ uploads/
 
 # OS
 .DS_Store
+
+DR_data_preparation/train.csv
+
+frontend/static
+
+ml_service/models
+
+ml_service/prototypes
+
+ml_service/static
+
+ml_service/history.json
+

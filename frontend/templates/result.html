@@ -1,35 +1,7 @@
 <!-- Prediction Result page -->
  <!-- http://127.0.0.1:3000/result -->
 
-
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Prediction Result</title>
-</head>
-<body>
-<div class="navbar">
-  <div class="nav-left">
-    <span class="logo">DR</span>
-    <a href="/dashboard">Dashboard</a>
-    <a href="/history">History</a>
-    <a href="/explainability">Explainability</a>
-    <a href="/">Logout</a>
-  </div>
-</div>
-
-<h2>Prediction Result</h2>
-<p><strong>Stage:</strong> {{ prediction }}</p>
-<p><strong>Confidence:</strong> {{ confidence }}</p>
-
-<a href="/">Back</a>
-
-</body>
-</html>
-
-
-
-<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Prediction Result</title>
@@ -37,14 +9,23 @@
 </head>
 <body>
 
-<div class="navbar">
-  <div class="nav-left">
-    <span class="logo">DR</span>
+<!-- <div class="navbar">
+<div class="nav-left"></div>
+    <div class="nav-right">
     <a href="/dashboard" class="nav-link-btn">Dashboard</a>
     <a href="/history" class="nav-link-btn">History</a>
     <a href="/predict-dr" class="nav-link-btn">New Prediction</a>
     <a href="/" class="nav-link-btn">Logout</a>
   </div>
+</div> -->
+<div class="navbar">
+    <div class="nav-left"></div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/history">History</a>
+        <a href="/predict-dr">New Prediction</a>
+        <a href="/login">Logout</a>
+    </div>
 </div>
 
 <div class="container">
@@ -59,10 +40,10 @@
 
     <div style="margin-top: 25px;">
       <a href="/predict-dr" class="nav-link-btn">Predict Another</a>
-      <a href="/history" class="nav-link-btn">View History</a>
+      <a href="/view-history" class="nav-link-btn">View History</a>
     </div>
   </div>
 </div>
 
 </body>
-</html> -->
+</html>
