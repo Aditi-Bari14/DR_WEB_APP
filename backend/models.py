@@ -11,3 +11,6 @@ class PredictionHistory(db.Model):
     hba1c = db.Column(db.Float)
     prediction = db.Column(db.String(50))
     confidence = db.Column(db.Float)
+ # ✅ REQUIRED
+    gradcam_image = db.Column(db.String(200))
+    prototype_image = db.Column(db.String(200))

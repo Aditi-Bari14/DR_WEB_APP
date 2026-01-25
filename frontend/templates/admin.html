@@ -3,12 +3,17 @@
 <head>
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
 <!-- NAVBAR -->
 <div class="navbar">
-    <div class="nav-left"></div>
+    <div class="nav-left">
+            <span class="logo">DR</span>
+            <span class="project-name">Diabetic Retinopathy</span>
+        </div>
     <div class="nav-right">
         <a href="/dashboard">Dashboard</a>
         <a href="/login">Logout</a>

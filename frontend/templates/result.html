@@ -1,38 +1,46 @@
-<!-- Prediction Result page -->
- <!-- http://127.0.0.1:3000/result -->
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Prediction Result</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
 <div class="navbar">
-    <div class="nav-left"></div>
-    <div class="nav-right">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/history">History</a>
-        <a href="/predict-dr">New Prediction</a>
-        <a href="/login">Logout</a>
-    </div>
+  <div class="nav-left">
+            <span class="logo">DR</span>
+            <span class="project-name">Diabetic Retinopathy</span>
+        </div>
+  <div class="nav-right">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/history">History</a>
+    <a href="/predict-dr">New Prediction</a>
+    <a href="/login">Logout</a>
+  </div>
 </div>
 
 <div class="container">
-  <h1>Prediction Result</h1>
+  <h1 class="page-title">Prediction Result</h1>
 
   <div class="form-box">
-    <p><strong>Detected Stage:</strong></p>
-    <h2 style="color:#1e3a8a;">{{ prediction }}</h2>
+    <div class="result-cards">
+      <div class="result-card">
+        <p class="label">Detected DR Stage</p>
+        <h2 class="prediction">{{ prediction }}</h2>
+      </div>
 
-    <p><strong>Model Confidence:</strong></p>
-    <h3>{{ confidence }}%</h3>
+      <div class="result-card">
+        <p class="label">Model Confidence</p>
+        <h2 class="confidence">{{ confidence }}%</h2>
+      </div>
+    </div>
 
-    <div style="margin-top: 25px;">
-      <a href="/predict-dr" class="nav-link-btn">Predict Another</a>
-      <a href="/patient/{{patient_id}}" class="nav-link-btn">View History</a>
-      <a href="{{ url_for('explain_page', patient_id=patient_id) }}" class="nav-link-btn">Explain</a>
+    <div class="action-buttons">
+      <a href="/predict-dr" class="btn-primary">Predict Another</a>
+      <a href="/patient/{{ patient_id }}" class="btn-primary">View Patient History</a>
+      <a href="/explain/{{ patient_id }}" class="btn-outline">Explain Prediction</a>
     </div>
   </div>
 </div>

@@ -3,52 +3,87 @@
 <head>
     <title>DR Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="nav-left">
-        <span class="logo">DR</span>
-        <span class="project-name">Diabetic Retinopathy</span>
+<div class="page-wrapper">
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="nav-left">
+            <span class="logo">DR</span>
+            <span class="project-name">Diabetic Retinopathy</span>
+        </div>
+
+        <div class="nav-right">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
     </div>
 
-    <div class="nav-right">
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-        <a href="/dashboard" >Dashboard</a>
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <div class="hero-text">
+            <h1>Diabetic Retinopathy Detection</h1>
+            <p>
+Diabetic Retinopathy is a diabetes-related eye disease that damages the blood vessels of the retina.
+If not detected early, it can lead to vision loss or blindness.
+This system assists in early detection by analyzing retinal images along with patient health information,
+helping clinicians identify disease severity at an early stage.
+</p>
+
+        </div>
+
+        <div class="hero-image">
+            <img src="{{ url_for('static', filename='retina.png') }}" alt="Retina Image">
+        </div>
     </div>
+
+    <div class="container">
+  <div class="dashboard-grid">
+
+    <div class="card">
+      <h3>AI-Powered Detection</h3>
+      <p>
+        Uses advanced deep learning techniques to analyze retinal images
+        and detect early signs of diabetic retinopathy with high accuracy,
+        supporting faster and more reliable diagnosis.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Explainable AI</h3>
+      <p>
+        Provides visual explanations such as heatmaps and similarity analysis,
+        enabling clinicians to understand which retinal regions influenced
+        the model’s decision.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Clinical Decision Support</h3>
+      <p>
+        Designed to assist ophthalmologists by identifying disease severity,
+        monitoring progression over time, and supporting informed
+        clinical decision-making.
+      </p>
+    </div>
+
+  </div>
 </div>
 
 
-
-<!-- HERO SECTION -->
-<div class="hero">
-
-    <!-- LEFT CONTENT -->
-    <div class="hero-text">
-        <h1>Diabetic Retinopathy Detection</h1>
-        <p>
-            A multimodal deep learning system using CNN, GCN and ProtoPNet
-            to detect diabetic retinopathy from retinal images and patient metadata.
-
-            An explainable multimodal deep learning system for diabetic retinopathy detection using retinal images and patient metadata.
-        </p>
+    <!-- FOOTER -->
+    <div class="footer">
+        <p><strong>Diabetic Retinopathy Detection System</strong></p>
+        <p>Final Year BE Project | AI in Healthcare</p>
+        <p>Contact: dr-support@gmail.com</p>
     </div>
 
-    <!-- RIGHT IMAGE -->
-    <div class="hero-image">
-        <img src="{{ url_for('static', filename='retina.png') }}" alt="Retina Image">
-    </div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-    <p><strong>Diabetic Retinopathy Detection System</strong></p>
-    <p>Final Year BE Project | AI in Healthcare</p>
-    <p>Contact: dr-support@gmail.com</p>
 </div>
 
 </body>
+
 </html>

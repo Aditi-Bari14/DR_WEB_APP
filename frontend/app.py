@@ -11,6 +11,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 BACKEND_URL = "http://127.0.0.1:5000"
+ML_SERVICE_URL = "http://127.0.0.1:8000"  # ✅ NEW
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -163,103 +164,132 @@ def patient_history(patient_id):
         patient_id=patient_id,
         plot_img=plot_img
     )
+# -------------------------
+# EXPLAIN (VIEW BUTTON)
+# -------------------------
+DR_CLASS_MAP = {
+    0: "No DR",
+    1: "Mild",
+    2: "Moderate",
+    3: "Severe",
+    4: "Proliferative"
+}
+def generate_clinical_interpretation(prediction_label):
+    interpretations = {
+        "No DR": {
+            "diagnosis": "No Diabetic Retinopathy",
+            "findings": ["Normal retinal vasculature"],
+            "meaning": "No visible signs of diabetic retinal damage.",
+            "recommendation": "Routine annual eye examination recommended."
+        },
+        "Mild": {
+            "diagnosis": "Mild Diabetic Retinopathy",
+            "findings": ["Microaneurysms", "Subtle vascular changes"],
+            "meaning": "Early-stage retinal damage due to diabetes.",
+            "recommendation": "Regular monitoring and good glycemic control advised."
+        },
+        "Moderate": {
+            "diagnosis": "Moderate Diabetic Retinopathy",
+            "findings": ["Hemorrhages", "Microaneurysms", "Vascular abnormalities"],
+            "meaning": "Progressive retinal damage with increased risk of vision impairment.",
+            "recommendation": "Closer ophthalmic follow-up recommended."
+        },
+        "Severe": {
+            "diagnosis": "Severe Diabetic Retinopathy",
+            "findings": ["Widespread hemorrhages", "Venous abnormalities"],
+            "meaning": "Advanced retinal ischemia with high risk of progression.",
+            "recommendation": "Urgent ophthalmologist referral advised."
+        },
+        "Proliferative": {
+            "diagnosis": "Proliferative Diabetic Retinopathy",
+            "findings": ["Neovascularization", "Severe vascular proliferation"],
+            "meaning": "Vision-threatening stage with abnormal new blood vessel growth.",
+            "recommendation": "Immediate specialist intervention required."
+        }
+    }
+
+    return interpretations.get(prediction_label, None)
+
+
 @app.route("/explain/<patient_id>")
-def explain_page(patient_id):
-    # Get latest patient record
-    response = requests.get(f"{BACKEND_URL}/api/history/{patient_id}")
-    if response.status_code != 200:
-        return f"Failed to fetch history: {response.text}", 500
+def explain(patient_id):
+    response = requests.get(f"{BACKEND_URL}/api/history")
     history = response.json()
-    if not history:
-        return "No record found", 404
 
-    record = history[0]  # latest prediction
+    record = next(r for r in history if r["patient_id"] == patient_id)
 
-       # 3️⃣ Open the image
-    image_path = os.path.join("uploads", record["image_name"])
-    if not os.path.exists(image_path):
-        return f"Image not found: {image_path}", 404
-    
-    # Map prediction to numeric before sending
-    class_map = {"No DR":0, "Mild":1, "Moderate":2, "Severe":3, "Proliferative DR":4}
-    pred_class_idx = class_map.get(record["prediction"], 0)
+    gradcam_url = None
+    if record.get("gradcam_image"):
+        gradcam_url = ML_SERVICE_URL + record["gradcam_image"]
 
+    # ✅ Generate interpretation from prediction
+    prediction_class = record.get("prediction_class")  # 0–4 integer
+    prediction_label = DR_CLASS_MAP.get(prediction_class)
 
-    files = {"image": open(image_path, "rb")}
-    data = {"predicted_class": str(pred_class_idx)}
+    clinical_data = generate_clinical_interpretation(prediction_label)
 
-    explain_resp = requests.post(
-        f"{BACKEND_URL}/api/explain",
-        files=files,
-        data=data
-    )
-    if explain_resp.status_code != 200:
-        return f"Explainability failed: {explain_resp.text}", 500
-
-
-    result = explain_resp.json()
-
-    proto_info = result.get("prototype_info", {})
-    top_proto = proto_info.get("top_prototypes", [])
-    scores = proto_info.get("similarity_scores", [])
 
     return render_template(
         "explainability.html",
-        cam_image=result.get("cam_image"),
-        proto_ids=top_proto,
-        proto_scores=scores,
-        age=record.get("age", 0),
-        hba1c=record.get("hba1c", 0),
-        glucose_mean=record.get("glucose_mean", 0),
-        glucose_std=record.get("glucose_std", 0),
-        patient_id=patient_id
+        record=record,
+        gradcam_image=gradcam_url,
+        prototype_image=record.get("prototype_image"),
+        clinical_data=clinical_data
     )
 
-# Explainability page
 # @app.route("/explain/<patient_id>")
 # def explain_page(patient_id):
-#     # 1️⃣ Fetch full history
-#     resp = requests.get(f"{BACKEND_URL}/api/history")
-#     if resp.status_code != 200:
-#         return "Failed to fetch history", 500
+#     # Get latest patient record
+#     response = requests.get(f"{BACKEND_URL}/api/history/{patient_id}")
+#     if response.status_code != 200:
+#         return f"Failed to fetch history: {response.text}", 500
+#     history = response.json()
+#     if not history:
+#         return "No record found", 404
 
-#     history = resp.json()
+#     record = history[0]  # latest prediction
 
-#     # 2️⃣ Filter record for this patient
-#     record = next((r for r in history if str(r["patient_id"]) == str(patient_id)), None)
-#     if not record:
-#         return "No record found for this patient", 404
+#        # 3️⃣ Open the image
+#     image_path = os.path.join("uploads", record["image_name"])
+#     if not os.path.exists(image_path):
+#         return f"Image not found: {image_path}", 404
+    
+#     # Map prediction to numeric before sending
+#     class_map = {"No DR":0, "Mild":1, "Moderate":2, "Severe":3, "Proliferative DR":4}
+#     pred_class_idx = class_map.get(record["prediction"], 0)
 
-#     files = {"image": open(f"uploads/{record['image_name']}", "rb")}
-#     data = {"predicted_class": record["prediction"]}
+
+#     files = {"image": open(image_path, "rb")}
+#     data = {"predicted_class": str(pred_class_idx)}
+
 #     explain_resp = requests.post(
 #         f"{BACKEND_URL}/api/explain",
-#         explain_resp = requests.post(f"{BACKEND_URL}/api/explain", files=files, data=data)
-
+#         files=files,
+#         data=data
 #     )
-
 #     if explain_resp.status_code != 200:
 #         return f"Explainability failed: {explain_resp.text}", 500
 
-#     explain_data = explain_resp.json()
 
-#     # 4️⃣ Extract prototype info
-#     proto_info = explain_data.get("prototype_info", {})
+#     result = explain_resp.json()
+
+#     proto_info = result.get("prototype_info", {})
 #     top_proto = proto_info.get("top_prototypes", [])
 #     scores = proto_info.get("similarity_scores", [])
 
-#     # 5️⃣ Render explainability template
 #     return render_template(
-#         "explainability.html",  # your template
-#         cam=explain_data["cam_image"],
+#         "explainability.html",
+#         cam_image=result.get("cam_image"),
 #         proto_ids=top_proto,
 #         proto_scores=scores,
-#         age=record["age"],
-#         hba1c=record["hba1c"],
+#         age=record.get("age", 0),
+#         hba1c=record.get("hba1c", 0),
 #         glucose_mean=record.get("glucose_mean", 0),
 #         glucose_std=record.get("glucose_std", 0),
-#         patient_id=record["patient_id"]
+#         patient_id=patient_id
 #     )
+
+
 
 
 

@@ -1,49 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Patient {{ patient_id }} History</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Patient {{ patient_id }} History</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
-    <div class="container">
-         <h1>Patient {{ patient_id }} History</h1>
-    <a href="/view-history" class="back-link">← Back to All Patients</a>
+<div class="navbar">
+ <div class="nav-left">
+            <span class="logo">DR</span>
+            <span class="project-name">Diabetic Retinopathy</span>
+        </div>
+  <div class="nav-right">
+    <a href="/view-history">All Patients</a>
+    <a href="/predict-dr">New Prediction</a>
+    <a href="/logout">Logout</a>
+  </div>
+</div>
 
-    {% if plot_img %}
-    <div class="plot">
-        <h2>Trend of DR Severity</h2>
-        <img src="data:image/png;base64,{{ plot_img }}" alt="Patient History Plot">
-    </div>
-    {% endif %}
+<div class="container">
+  <h1 class="page-title">Patient ID: {{ patient_id }}</h1>
 
-        {% if history %}
-        <table class="history-table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Prediction</th>
-                    <th>Confidence (%)</th>
-                    <th>Age</th>
-                    <th>HbA1c</th>
+  {% if plot_img %}
+  <div class="plot">
+    <h3 class="section-title">Disease Progression Trend</h2>
+    <img src="data:image/png;base64,{{ plot_img }}" alt="DR Trend">
+  </div>
+  {% endif %}
 
-                </tr>
-            </thead>
-            <tbody>
-                {% for record in history %}
-                <tr>
-                    <td>{{ record.date }}</td>
-                    <td>{{ record.prediction }}</td>
-                    <td>{{ record.confidence }}</td>
-                    <td>{{ record.age }}</td>
-                    <td>{{ record.hba1c }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p class="no-history">No history found for this patient.</p>
-        {% endif %}
-    </div>
+  {% if history %}
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Prediction</th>
+        <th>Confidence (%)</th>
+        <th>Age</th>
+        <th>HbA1c</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in history %}
+      <tr>
+        <td>{{ record.date }}</td>
+        <td>{{ record.prediction }}</td>
+        <td>{{ record.confidence }}</td>
+        <td>{{ record.age }}</td>
+        <td>{{ record.hba1c }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="no-history">
+    No previous records found for this patient.
+  </div>
+  {% endif %}
+
+  <div class="back-btn">
+    <a href="/history" class="btn-outline">← Back to All Patients</a>
+  </div>
+</div>
+
 </body>
 </html>

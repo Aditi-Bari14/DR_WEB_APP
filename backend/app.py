@@ -3,13 +3,18 @@ import requests
 import os
 from datetime import datetime
 from models import db, PredictionHistory
+from flask_migrate import Migrate
+import json
+
 
 app = Flask(__name__)
 
 # Database config
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 db.init_app(app)
+
 
 ML_SERVICE_URL = "http://127.0.0.1:8000"
 UPLOAD_FOLDER = "uploads"
@@ -18,46 +23,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Create DB tables
 with app.app_context():
     db.create_all()
-
-# -------------------------
-# PREDICT (Frontend → Backend → ML)
-# -------------------------
-# @app.route("/api/predict", methods=["POST"])
-# def predict():
-#     if "image" not in request.files:
-#         return jsonify({"error": "No image uploaded"}), 400
-
-#     files = {"image": request.files["image"]}
-#     data = request.form.to_dict()
-
-#     try:
-#         response = requests.post(
-#             f"{ML_SERVICE_URL}/predict",
-#             files=files,
-#             data=data
-#         )
-#         response.raise_for_status()
-#     except requests.exceptions.RequestException as e:
-#         return jsonify({"error": "ML predict failed", "details": str(e)}), 500
-
-#     try:
-#         return jsonify(response.json())
-#     except Exception as e:
-#         return jsonify({"error": f"Invalid response from ML service: {e}"}), 500
-
-# # -------------------------
-# # HISTORY (Frontend → Backend → ML)
-# # -------------------------
-# @app.route("/api/history", methods=["GET"])
-# def get_history():
-#     try:
-#         response = requests.get(f"{ML_SERVICE_URL}/history")
-#         response.raise_for_status()
-#         return jsonify(response.json())
-#     except requests.exceptions.RequestException as e:
-#         return jsonify({"error": "Failed to fetch history", "details": str(e)}), 500
-#     except Exception as e:
-#         return jsonify({"error": f"Invalid response from ML service: {e}"}), 500
 @app.route("/api/predict", methods=["POST"])
 def predict():
     if "image" not in request.files:
@@ -76,21 +41,28 @@ def predict():
             files=files,
             data=data
         )
-        ml_response.raise_for_status()
+        print("STATUS:", ml_response.status_code)
+        print("HEADERS:", ml_response.headers)
+        print("RAW RESPONSE:", ml_response.text)
+        ml_response.raise_for_status()  
+
         result = ml_response.json()
+
     except Exception as e:
         return jsonify({"error": f"ML service failed: {e}"}), 500
 
-    # ✅ SAVE HISTORY IN DATABASE
     record = PredictionHistory(
-        patient_id=data["patient_id"],
-        date=datetime.now(),
-        image_name=image.filename,
-        age=float(data["age"]),
-        hba1c=float(data["hba1c"]),
-        prediction=result["prediction"],
-        confidence=result["confidence"]
-    )
+    patient_id=data["patient_id"],
+    date=datetime.now(),
+    image_name=image.filename,
+    age=float(data["age"]),
+    hba1c=float(data["hba1c"]),
+    prediction=json.dumps(result["prediction"]),
+    confidence=result["confidence"],
+    gradcam_image=result["gradcam_image"],
+    prototype_image=result["prototype_image"]
+)
+
 
     db.session.add(record)
     db.session.commit()
@@ -112,7 +84,9 @@ def get_history():
             "age": r.age,
             "hba1c": r.hba1c,
             "prediction": r.prediction,
-            "confidence": r.confidence
+            "confidence": r.confidence,
+            "gradcam_image": r.gradcam_image,
+            "prototype_image": r.prototype_image
         } for r in records
     ])
 

@@ -1,109 +1,114 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Explainability – DR Prediction</title>
+    <title>Explainable AI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 
 <!-- NAVBAR -->
-
 <div class="navbar">
-    <div class="nav-left"></div>
+    <div class="nav-left">
+        <span class="logo">XAI</span>
+        <span class="project-name">Explainable AI Dashboard</span>
+    </div>
     <div class="nav-right">
         <a href="/dashboard">Dashboard</a>
-        <a href="/history">History</a>
+        <a href="/view-history">History</a>
         <a href="/login">Logout</a>
     </div>
 </div>
+
 <!-- MAIN CONTAINER -->
 <div class="container">
 
-    <h1>Model Explainability</h1>
+    <h2>Explainable AI (XAI)</h2>
     <p class="subtitle">
-        This section explains <strong>why</strong> the AI model predicted the given
-        Diabetic Retinopathy stage.
+        Understanding how the model arrived at its prediction
     </p>
 
-    <!-- GRAD-CAM SECTION -->
+    <!-- PREDICTION SUMMARY -->
     <div class="xai-box">
-        <h3> Image-based Explanation (Grad-CAM)</h3>
+        <h3>Prediction Summary</h3>
+        <p><b>Patient ID:</b> {{ record.patient_id }}</p>
+        <p><b>Prediction:</b> {{ record.prediction }}</p>
+        <p><b>Confidence:</b> {{ record.confidence }}%</p>
+        <p><b>Date:</b> {{ record.date }}</p>
+    </div>
+
+    <!-- VISUAL EXPLANATION -->
+    <div class="xai-box">
+        <h3>Visual Explanation</h3>
+        <p class="description">
+            Highlighted regions indicate retinal areas that contributed most to the model’s prediction.
+        </p>
 
         <div class="xai-images">
-            <div class="image-placeholder">
-    Original Retina Image
-    <br>
-    <img src="/uploads/{{ patient_id }}_original.png" width="300">
-</div>
-           <div class="image-placeholder">
-    Grad-CAM Heatmap
-    <br>
-    {% if cam_image %}
-        <img src="{{ url_for('static', filename=cam_image.split('static/')[-1]) }}" width="300">
-    {% else %}
-        No image available
-    {% endif %}
-</div>
+
+            <!-- ORIGINAL IMAGE -->
+            <div class="xai-image-box">
+                <p class="img-title">Original Retina Image</p>
+                <img
+                    src="http://127.0.0.1:8000/uploads/{{ record.image_name }}"
+                    class="xai-img"
+                    alt="Original Retina Image">
+            </div>
+
+            <!-- GRAD-CAM -->
+            <div class="xai-image-box">
+                <p class="img-title">Grad-CAM Heatmap</p>
+                {% if gradcam_image %}
+                    <img src="{{ gradcam_image }}" class="xai-img" alt="Grad-CAM">
+                {% else %}
+                    <div class="placeholder">Not Available</div>
+                {% endif %}
+            </div>
+
+            <!-- PROTOTYPE SIMILARITY -->
+            <div class="xai-image-box">
+                <p class="img-title">Prototype Similarity</p>
+                {% if prototype_image %}
+                    <img
+                        src="http://127.0.0.1:8000{{ prototype_image }}"
+                        class="xai-img"
+                        alt="Prototype Similarity">
+                {% else %}
+                    <div class="placeholder">Not Available</div>
+                {% endif %}
+            </div>
+
         </div>
-
-        <p class="subtitle" style="margin-top:15px;">
-            Highlighted regions show the retinal areas that influenced the
-            model’s decision most.
-        </p>
     </div>
 
-    <!-- PROTOTYPE EXPLANATION -->
+    <!-- CLINICAL INTERPRETATION -->
     <div class="xai-box">
-        <h3> Prototype-based Reasoning</h3>
+        <h3>Clinical Interpretation (Lesion-based)</h3>
 
-        <table class="history-table">
-            <thead>
-                <tr>
-                    <th>Prototype ID</th>
-                    <th>Similarity Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for proto, score in zip(proto_ids, proto_scores) %}
-                <tr>
-                    <td>Prototype {{ proto }}</td>
-                    <td>{{ "%.3f"|format(score) }}</td>
-                </tr>
+        {% if clinical_data %}
+        <div class="clinical-card">
+            <p><b>Diagnosis:</b> {{ clinical_data.diagnosis }}</p>
+
+            <p><b>Key Findings:</b></p>
+            <ul>
+                {% for item in clinical_data.findings %}
+                    <li>{{ item }}</li>
                 {% endfor %}
-            </tbody>
-        </table>
+            </ul>
 
-        <p class="subtitle" style="margin-top:15px;">
-            Higher similarity indicates closer matching with learned disease patterns.
-        </p>
+            <p><b>Clinical Meaning:</b> {{ clinical_data.meaning }}</p>
+            <p><b>Recommendation:</b> {{ clinical_data.recommendation }}</p>
+        </div>
+        {% else %}
+            <p class="no-data">Clinical interpretation not available.</p>
+        {% endif %}
     </div>
 
-    <!-- TABULAR CONTRIBUTION -->
-    <div class="xai-box">
-        <h3> Clinical Feature Contribution</h3>
-
-        <table class="history-table">
-            <thead>
-                <tr>
-                    <th>Feature</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Age</td><td>{{ age }}</td></tr>
-                <tr><td>HbA1c</td><td>{{ hba1c }}</td></tr>
-                <tr><td>Glucose Mean</td><td>{{ glucose_mean }}</td></tr>
-                <tr><td>Glucose Std</td><td>{{ glucose_std }}</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- NAVIGATION -->
-    <div style="margin-top:30px;">
-        <a href="/view-history" class="nav-link-btn">← Back to History</a>
-        <a href="/dashboard" class="nav-link-btn">Dashboard</a>
+    <!-- BACK BUTTON -->
+    <div class="back-btn">
+        <a href="/view-history" class="btn-primary">← Back to History</a>
     </div>
 
 </div>
