@@ -51,16 +51,6 @@ def view_history():
     return render_template("history.html", history=history)
 
 
-# -------------------------
-# EXPLAINABILITY (XAI)
-
-
-# -------------------------
-# ADMIN
-# -------------------------
-@app.route("/admin")
-def admin():
-    return render_template("admin.html")
 
 @app.route("/predict-dr")
 def predict_dr_page():
@@ -122,8 +112,14 @@ def generate_history_plot(history):
     # Extract dates and predictions
     dates = [datetime.strptime(r["date"], "%Y-%m-%d %H:%M:%S").strftime("%Y-%m-%d") for r in history_sorted]
 
-    predictions = [r["prediction"] for r in history_sorted]
-
+    #predictions = [r["prediction"] for r in history_sorted]
+    predictions = []
+    for r in history_sorted:
+        p_data = r.get("prediction")
+        if isinstance(p_data, dict):
+            predictions.append(p_data.get("prediction", "No DR"))
+        else:
+            predictions.append(p_data) # Fallback if it's already a string
     # Map DR classes to numeric values for plotting
     class_order = {"No DR":0, "Mild":1, "Moderate":2, "Severe":3, "Proliferative DR":4}
     y_values = [class_order.get(p, -1) for p in predictions]
@@ -235,6 +231,19 @@ def explain(patient_id):
         gradcam_image=gradcam_url,
         prototype_image=record.get("prototype_image"),
         clinical_data=clinical_data
+    )
+
+@app.route("/admin")
+def admin():
+    stats = requests.get(f"{BACKEND_URL}/api/admin/stats").json()
+    users = requests.get(f"{BACKEND_URL}/api/admin/users").json()
+    predictions = requests.get(f"{BACKEND_URL}/api/admin/predictions").json()
+
+    return render_template(
+        "admin.html",
+        stats=stats,
+        users=users,
+        predictions=predictions
     )
 
 # @app.route("/explain/<patient_id>")

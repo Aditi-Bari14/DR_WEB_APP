@@ -10,10 +10,17 @@
 
 <div class="navbar">
   <div class="nav-left">
+      <!-- BACK BUTTON -->
+        <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
         </div>
-  <div class="nav-right">
+  <div class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="nav-right" id="navMenu">
     <a href="/dashboard">Dashboard</a>
     <a href="/history">History</a>
     <a href="/predict-dr">New Prediction</a>
@@ -21,29 +28,74 @@
   </div>
 </div>
 
-<div class="container">
-  <h1 class="page-title">Prediction Result</h1>
 
-  <div class="form-box">
-    <div class="result-cards">
-      <div class="result-card">
-        <p class="label">Detected DR Stage</p>
-        <h2 class="prediction">{{ prediction }}</h2>
-      </div>
+<div class="container">  
+  <h2 >Prediction Result</h2>
+<div class="xai-box">
+  <div class="summary-content">
 
-      <div class="result-card">
-        <p class="label">Model Confidence</p>
-        <h2 class="confidence">{{ confidence }}%</h2>
-      </div>
+     <div class="summary-item">
+            <span class="label">DR Detected Stage:</span>
+            <span class="value">
+                <span class="status-badge {{ prediction.prediction|lower|replace(' ', '-') }}">
+        {{ prediction.prediction }}
+      </span>
+            </span>
+        </div>
+
+    <div class="summary-item">
+      <span class="label">Findings:</span>
+      <span class="value">
+        <span>
+             {{ prediction.lesion_report.lesions | join(', ') }}
+        </span>
+      </span>
     </div>
+
+    <div class="summary-item">
+            <span class="label">Model Confidence:</span>
+            <span class="value">{{confidence}}%</span>
+        </div>
+</div>
 
     <div class="action-buttons">
       <a href="/predict-dr" class="btn-primary">Predict Another</a>
       <a href="/patient/{{ patient_id }}" class="btn-primary">View Patient History</a>
-      <a href="/explain/{{ patient_id }}" class="btn-outline">Explain Prediction</a>
+      <a href="/explain/{{ patient_id }}" class="btn-primary">Explain Prediction</a>
     </div>
+</div>
   </div>
 </div>
+
+<script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a link
+    navMenu.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A') {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+     function goBack() {
+    window.history.back();
+}
+</script>
 
 </body>
 </html>

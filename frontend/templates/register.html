@@ -11,10 +11,17 @@
 <!-- NAVBAR -->
 <div class="navbar">
     <div class="nav-left">
+         <!-- BACK BUTTON -->
+        <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
         </div>
-    <div class="nav-right">
+    <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="nav-right" id="navMenu">
         <a href="/">Home</a>
         <a href="/login">Login</a>
     </div>
@@ -29,7 +36,7 @@
     <p class="subtitle">Create a new account</p>
 
     <div class="form-box small-form">
-        <form action="/login">
+        <form id="registerForm">
 
             <label>Name</label>
             <input type="text" required>
@@ -44,8 +51,62 @@
 
         </form>
     </div>
-
 </div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const name = document.querySelector("input[type='text']").value;
+    const email = document.querySelector("input[type='email']").value;
+    const password = document.querySelector("input[type='password']").value;
+
+    const response = await fetch("http://127.0.0.1:5000/api/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        alert("Registered successfully");
+        window.location.href = "/login";
+    } else {
+        alert(data.error);
+    }
+});
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a link
+    navMenu.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A') {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+    function goBack() {
+    window.history.back();
+}
+</script>
 
 </body>
 </html>

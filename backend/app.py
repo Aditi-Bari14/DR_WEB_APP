@@ -2,12 +2,15 @@ from flask import Flask, request, jsonify
 import requests
 import os
 from datetime import datetime
-from models import db, PredictionHistory
+from models import db, PredictionHistory,User
 from flask_migrate import Migrate
 import json
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app, origins=["http://127.0.0.1:3000"])
+
 
 # Database config
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -23,6 +26,47 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 # Create DB tables
 with app.app_context():
     db.create_all()
+
+#Register
+@app.route("/api/register", methods=["POST"])
+def register():
+    data = request.json
+
+    # Check if user exists
+    existing_user = User.query.filter_by(email=data["email"]).first()
+    if existing_user:
+        return jsonify({"error": "User already exists"}), 400
+
+    new_user = User(
+        name=data["name"],
+        email=data["email"],
+        password=data["password"]
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"message": "User registered successfully"})
+
+#Login
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.json
+
+    user = User.query.filter_by(
+        email=data["email"],
+        password=data["password"]
+    ).first()
+
+    if not user:
+        return jsonify({"error": "Invalid credentials"}), 401
+
+    return jsonify({
+        "message": "Login successful",
+        "name": user.name
+    })
+
+
 @app.route("/api/predict", methods=["POST"])
 def predict():
     if "image" not in request.files:
@@ -75,20 +119,43 @@ def get_history():
     records = PredictionHistory.query.order_by(
         PredictionHistory.date.desc()
     ).all()
+    history_list = []
+    for r in records:
+        # Check if prediction is a string and convert to dict
+        prediction_data = r.prediction
+        if isinstance(prediction_data, str):
+            try:
+                prediction_data = json.loads(prediction_data)
+            except json.JSONDecodeError:
+                prediction_data = {"prediction": "Data Error", "lesion_report": {"lesions": []}}
 
-    return jsonify([
-        {
+        history_list.append({
             "patient_id": r.patient_id,
             "date": r.date.strftime("%Y-%m-%d %H:%M:%S"),
             "image_name": r.image_name,
             "age": r.age,
             "hba1c": r.hba1c,
-            "prediction": r.prediction,
-            "confidence": r.confidence,
+            "prediction": prediction_data, # Now a dictionary, not a string!
+            "confidence": round(r.confidence, 2) if r.confidence else 0,
             "gradcam_image": r.gradcam_image,
             "prototype_image": r.prototype_image
-        } for r in records
-    ])
+        })
+
+    return jsonify(history_list)
+    
+    # return jsonify([
+    #     {
+    #         "patient_id": r.patient_id,
+    #         "date": r.date.strftime("%Y-%m-%d %H:%M:%S"),
+    #         "image_name": r.image_name,
+    #         "age": r.age,
+    #         "hba1c": r.hba1c,
+    #         "prediction": r.prediction,
+    #         "confidence": r.confidence,
+    #         "gradcam_image": r.gradcam_image,
+    #         "prototype_image": r.prototype_image
+    #     } for r in records
+    # ])
 
 # PER-PATIENT HISTORY
 @app.route("/api/history/<patient_id>", methods=["GET"])
@@ -96,17 +163,36 @@ def get_patient_history(patient_id):
     records = PredictionHistory.query.filter_by(
         patient_id=patient_id
     ).order_by(PredictionHistory.date.desc()).all()
+    history_list = []
+    for r in records:
+        # Check if prediction is a string and convert to dict
+        prediction_data = r.prediction
+        if isinstance(prediction_data, str):
+            try:
+                prediction_data = json.loads(prediction_data)
+            except json.JSONDecodeError:
+                prediction_data = {"prediction": "Data Error", "lesion_report": {"lesions": []}}
 
-    return jsonify([
-        {
+        history_list.append({
             "date": r.date.strftime("%Y-%m-%d %H:%M:%S"),
-            "prediction": r.prediction,
-            "confidence": r.confidence,
-             "image_name": r.image_name,   # ✅ Add this
+            "image_name": r.image_name,
             "age": r.age,
-            "hba1c": r.hba1c
-        } for r in records
-    ])
+            "hba1c": r.hba1c,
+            "prediction": prediction_data, # Now a dictionary, not a string!
+            "confidence": round(r.confidence, 2) if r.confidence else 0,
+        })
+
+    return jsonify(history_list)
+    # return jsonify([
+    #     {
+    #         "date": r.date.strftime("%Y-%m-%d %H:%M:%S"),
+    #         "prediction": r.prediction,
+    #         "confidence": r.confidence,
+    #          "image_name": r.image_name,   # ✅ Add this
+    #         "age": r.age,
+    #         "hba1c": r.hba1c
+    #     } for r in records
+    # ])
 @app.route("/api/explain", methods=["POST"])
 def explain():
     if "image" not in request.files:
@@ -125,7 +211,59 @@ def explain():
         return jsonify(response.json())
     except Exception as e:
         return jsonify({"error": f"Explain failed: {e}"}), 500
+    
 
+@app.route("/api/admin/stats", methods=["GET"])
+def admin_stats():
+    total_users = User.query.count()
+    total_predictions = PredictionHistory.query.count()
+
+    # High risk = Severe + Proliferative
+    high_risk = PredictionHistory.query.filter(
+        PredictionHistory.prediction.contains("Severe") |
+        PredictionHistory.prediction.contains("Proliferative")
+    ).count()
+
+    return jsonify({
+        "total_users": total_users,
+        "total_predictions": total_predictions,
+        "high_risk": high_risk
+    })
+#Users List API
+@app.route("/api/admin/users", methods=["GET"])
+def get_users():
+    users = User.query.all()
+
+    return jsonify([
+        {
+            "name": u.name,
+            "email": u.email,
+            "role": "Admin" if u.email == "admin@gmail.com" else "User"
+        } for u in users
+    ])
+#Prediction list api
+@app.route("/api/admin/predictions", methods=["GET"])
+def get_predictions():
+    records = PredictionHistory.query.order_by(
+        PredictionHistory.date.desc()
+    ).limit(10).all()
+
+    data = []
+    for r in records:
+        prediction_data = r.prediction
+        try:
+            prediction_data = json.loads(prediction_data)
+            label = prediction_data.get("prediction", "N/A")
+        except:
+            label = prediction_data
+
+        data.append({
+            "user": r.patient_id,
+            "prediction": label,
+            "confidence": round(r.confidence * 100, 2)
+        })
+
+    return jsonify(data)
 # -------------------------
 # Explainability
 # -------------------------

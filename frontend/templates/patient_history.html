@@ -10,6 +10,8 @@
 
 <div class="navbar">
  <div class="nav-left">
+              <!-- BACK BUTTON -->
+        <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
         </div>
@@ -45,7 +47,18 @@
       {% for record in history %}
       <tr>
         <td>{{ record.date }}</td>
-        <td>{{ record.prediction }}</td>
+        <td class="prediction-cell">
+    <div class="prediction-stage">
+        <span class="status-badge {{ record.prediction.prediction|lower|replace(' ', '-') }}">
+            {{ record.prediction.prediction }}
+        </span>
+    </div>
+    <ul class="lesion-list">
+        {% for lesion in record.prediction.lesion_report.lesions %}
+            <li>{{ lesion }}</li>
+        {% endfor %}
+    </ul>
+</td>
         <td>{{ record.confidence }}</td>
         <td>{{ record.age }}</td>
         <td>{{ record.hba1c }}</td>
@@ -60,9 +73,22 @@
   {% endif %}
 
   <div class="back-btn">
-    <a href="/history" class="btn-outline">← Back to All Patients</a>
+    <a href="/view-history" class="btn-outline">← Back to All Patients</a>
   </div>
 </div>
+<script>
+   function goBack() {
+    window.history.back();
+}
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+</script>
 
 </body>
 </html>

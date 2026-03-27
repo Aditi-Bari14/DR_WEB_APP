@@ -25,7 +25,7 @@ body {
   line-height: 1.6;
 }
 
-/* NAVBAR */
+/* Navigation */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -33,6 +33,19 @@ body {
   padding: 14px 32px;
   background: linear-gradient(90deg, #0b5ed7, #084298);
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  position: relative;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .logo, .clinic-name {
@@ -61,10 +74,58 @@ body {
   background: rgba(255,255,255,0.18);
 }
 
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  margin: 3px 0;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+.back-btn {
+    color: white;
+    background: transparent; /* Assuming you want it transparent based on the image */
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 20px;         /* Increased size slightly to match the text height */
+    
+    /* Optional: if it still feels low, use a tiny negative margin */
+    margin-top: -2px; 
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    background-color: #7c7fe4;
+}
 /* CONTAINER */
 .container {
   max-width: 1100px;
-  margin: 32px auto;
+  margin: auto;
   align-items: center;
   flex-direction: column;
   padding: 20px;
@@ -145,13 +206,55 @@ body {
 .form-box,
 .card,
 .dashboard-card,
-.xai-box,
 .admin-box {
   background: var(--card);
   padding: 28px;
   border-radius: 14px;
   box-shadow: 0 10px 28px rgba(0,0,0,0.08);
   margin-bottom: 25px;
+}
+/* Update your existing .xai-box style */
+.xai-box {
+    background: var(--card);
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    margin: 0 auto 25px auto; /* Centering the boxes */
+    max-width: 900px;         /* Ensures all three cards are exactly the same width */
+    width: 100%;             /* Responsive for smaller screens */
+    box-sizing: border-box;
+}
+/* Container for the summary rows */
+.summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Spacing between rows */
+    margin-top: 15px;
+}
+
+/* Individual row styling */
+.summary-item {
+    display: flex;
+    align-items: flex-start; /* Aligns label with the top of long reports */
+}
+
+/* Fixed width for labels so values align vertically */
+.summary-item .label {
+    font-weight: bold;
+    min-width: 120px; /* Adjust this width based on your longest label */
+    color: #333;
+}
+
+/* Value styling */
+.summary-item .value {
+    color: #555;
+    flex: 1; /* Takes up remaining space */
+    line-height: 1.4;
+}
+
+/* Ensure the badge doesn't have extra bottom margin here */
+.summary-item .status-badge {
+    margin-bottom: 0;
 }
 
 .small-form {
@@ -199,6 +302,10 @@ input:focus {
 
 
 /* BUTTONS */
+.action-buttons {
+  margin-top: 15px;
+
+}
 button, .btn-primary {
   background: var(--primary);
   color: white;
@@ -208,6 +315,7 @@ button, .btn-primary {
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
+  text-decoration: none;
 }
 
 button:hover, .btn-primary:hover {
@@ -240,32 +348,71 @@ button:hover, .btn-primary:hover {
   text-decoration: none;
   color: var(--text-dark);
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;    /* Stack text vertically */
+  justify-content: center;   /* Center content vertically */
+  align-items: center;       /* Center content horizontally */
+  text-align: center;        /* Ensure multi-line text is centered */
+  padding: 40px 20px;        /* Give the card consistent internal breathing room */
+  min-height: 200px;         /* Ensures all cards are the same height */
+  background: #ffffff;       /* Ensure background is white for the shadow to show */
+  border-radius: 12px;       /* Match the rounded look in your image */
 }
 
 .dashboard-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
-
-/* RESULT CARDS */
-.result-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+.dashboard-card h3 {
+  margin-bottom: 12px;       /* Controlled spacing between Title and Description */
+  font-size: 1.4rem;
 }
 
+.dashboard-card p {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;               /* Subtler color for the description */
+}
+/* RESULT CARDS */
+/* Ensure uniformity between result cards */
 .result-card {
-  background: #f8fbff;
-  border-left: 6px solid var(--primary);
+    width: 100%;
+    max-width: 900px;
+    background: #f8fbff;
+    border-left: 6px solid var(--primary);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #777;
+    margin-bottom: 10px;
 }
 
 .prediction {
-  font-size: 28px;
+    font-size: 32px;
+    margin-bottom: 15px;
 }
 
 .confidence {
-  color: var(--success);
-  font-size: 26px;
+    color: var(--success);
+    font-size: 32px;
+}
+
+.confidence-section {
+    margin-top: 20px;
+}
+
+.clinical-note {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    color: #555;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
 }
 
 /* TABLE */
@@ -293,20 +440,96 @@ td {
 tr:hover {
   background: #f1f7fc;
 }
+/* Container for the cell to align text to the left for better readability */
+.prediction-cell {
+    text-align: left !important; /* Overriding your center alignment for this specific column */
+    padding: 15px !important;
+    min-width: 300px;
+}
 
+/* Table links */
+.table-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.table-link:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+/* Severity Colors */
+.status-badge.no-dr { background-color: #d4edda; color: #155724; }
+.status-badge.mild-dr { background-color: #fff3cd; color: #856404; }
+.status-badge.moderate-dr { background-color: #ffe5d0; color: #d9480f; }
+.status-badge.severe-dr { background-color: #f8d7da; color: #721c24; }
+
+/* Clean list for medical findings */
+.lesion-list {
+    margin: 8px 0 0 0;
+    padding: 0;
+    list-style: none;
+    text-align: left; /* Better readability for lists */
+}
+
+.lesion-list li {
+    font-size: 0.8rem;
+    color: #555;
+    position: relative;
+    padding-left: 15px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.lesion-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Ensure the stage badge stands out */
+.status-badge {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 5px 15px;
+}
 /* XAI */
 .xai-images {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Force 3 columns for desktop */
+    gap: 20px;
+}
+
+.xai-image-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .xai-img {
-  width: 100%;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+    width: 100%;
+    aspect-ratio: 1 / 1;      /* Forces images into a perfect square */
+    object-fit: cover;        /* Crops slightly to fill the square without stretching */
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background-color: #000;   /* Fills any gaps if image isn't square */
 }
-
 /* FOOTER */
 html, body {
   height: 100%;
@@ -330,36 +553,297 @@ html, body {
   text-align: center;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
-
+  /* Navigation */
   .navbar {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    padding: 12px 16px;
+    position: relative;
+  }
+
+  .nav-left {
+    flex: 1;
   }
 
   .nav-right {
-    margin-top: 10px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #0b5ed7, #084298);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
   }
 
+  .nav-right.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-right a {
+    margin: 0;
+    padding: 14px 16px;
+    border-radius: 0;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .nav-right a:last-child {
+    border-bottom: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  /* Hero Section */
   .hero {
     flex-direction: column;
     text-align: center;
-    padding: 60px 20px;
+    padding: 40px 20px;
+    gap: 24px;
   }
-   .hero-text {
+
+  .hero-text {
     max-width: 100%;
-  }  
+  }
+
+  .hero-text h1 {
+    font-size: 28px;
+  }
+
+  .hero-text p {
+    font-size: 15px;
+  }
 
   .hero-image img {
-    max-width: 300px;
+    max-width: 280px;
   }
 
-  .container {
-    padding: 15px;
+  /* Container and Layout */
+  .container, .container1 {
+    padding: 16px;
+    margin: 16px auto;
+  }
+
+  .container h2, .container1 h2 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  /* Forms */
+  .form-box, .card, .dashboard-card, .admin-box, .xai-box {
+    padding: 20px;
+    margin-bottom: 20px;
   }
 
   .small-form {
     max-width: 100%;
+  }
+
+  input, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px;
+  }
+
+  .form-box button, button, .btn-primary {
+    padding: 14px;
+    font-size: 16px;
+    min-height: 48px; /* Touch-friendly */
+  }
+
+  /* Dashboard Grid */
+  .dashboard-grid, .dashboard-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dashboard-card {
+    padding: 24px 16px;
+    min-height: 160px;
+  }
+
+  .dashboard-card h3 {
+    font-size: 18px;
+  }
+
+  .dashboard-card p {
+    font-size: 14px;
+  }
+
+  /* Tables - Make responsive */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  table {
+    min-width: 600px; /* Ensures table doesn't get too compressed */
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 10px 8px;
+    white-space: nowrap;
+  }
+
+  .prediction-cell {
+    min-width: 250px;
+    text-align: left !important;
+    white-space: normal;
+  }
+
+  /* XAI Images */
+  .xai-images {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .xai-image-box {
+    margin-bottom: 16px;
+  }
+
+  .xai-img {
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+  }
+
+  .img-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  /* Result Cards */
+  .result-card {
+    padding: 20px;
+  }
+
+  .prediction {
+    font-size: 24px;
+  }
+
+  .confidence {
+    font-size: 24px;
+  }
+
+  /* Summary Items */
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .summary-item .label {
+    min-width: auto;
+    font-size: 14px;
+  }
+
+  .summary-item .value {
+    font-size: 14px;
+  }
+
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .action-buttons a, .action-buttons button {
+    text-align: center;
+    padding: 12px;
+    min-height: 48px; /* Touch-friendly */
+  }
+
+  /* Footer */
+  .footer {
+    padding: 20px 16px;
+  }
+
+  .footer p {
+    font-size: 14px;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container, .container1 {
+    max-width: 900px;
+    padding: 24px;
+  }
+
+  .hero {
+    padding: 48px 24px;
+    gap: 32px;
+  }
+
+  .hero-text h1 {
+    font-size: 32px;
+  }
+
+  .dashboard-grid, .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .xai-images {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  table {
+    font-size: 15px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1200px) {
+  .container, .container1 {
+    max-width: 1200px;
+  }
+
+  .hero {
+    padding: 64px 40px;
+  }
+
+  .dashboard-grid, .dashboard-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .xai-images {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .navbar, .action-buttons, .footer {
+    display: none !important;
+  }
+
+  .container, .container1 {
+    max-width: none;
+    padding: 0;
+  }
+
+  .xai-box, .form-box, .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
   }
 }

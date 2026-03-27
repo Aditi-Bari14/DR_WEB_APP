@@ -17,7 +17,13 @@
             <span class="project-name">Diabetic Retinopathy</span>
         </div>
 
-        <div class="nav-right">
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-right" id="navMenu">
             <a href="/login">Login</a>
             <a href="/register">Register</a>
         </div>
@@ -83,6 +89,34 @@ helping clinicians identify disease severity at an early stage.
     </div>
 
 </div>
+
+<script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a link
+    navMenu.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A') {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+</script>
 
 </body>
 

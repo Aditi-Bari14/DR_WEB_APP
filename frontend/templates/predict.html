@@ -11,18 +11,25 @@
 
 <div class="navbar">
     <div class="nav-left">
+          <!-- BACK BUTTON -->
+        <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
         </div>
-    <div class="nav-right">
+    <div class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <div class="nav-right" id="navMenu">
         <a href="/dashboard">Dashboard</a>
-        <a href="/history">History</a>
+        <a href="/view-history">History</a>
         <a href="/login">Logout</a>
     </div>
 </div>
 
 <div class="container1">
-  <h1>Predict Diabetic Retinopathy</h1>
+  <h2>Predict Diabetic Retinopathy</h2>
   <p class="subtitle">Upload retinal image and patient details</p>
 
   <div class="form-box small-form">
@@ -50,6 +57,36 @@
     </form>
   </div>
 </div>
+
+<script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a link
+    navMenu.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A') {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+        function goBack() {
+    window.history.back();
+}
+</script>
 
 </body>
 </html>

@@ -10,10 +10,17 @@
 
 <div class="navbar">
   <div class="nav-left">
+              <!-- BACK BUTTON -->
+        <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
         </div>
-  <div class="nav-right">
+  <div class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="nav-right" id="navMenu">
     <a href="/dashboard">Dashboard</a>
     <a href="/predict-dr">New Prediction</a>
     <a href="/logout">Logout</a>
@@ -23,37 +30,82 @@
 <div class="container">
   <h1 class="page-title">Patient Prediction History</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Date & Time</th>
-        <th>Patient ID</th>
-        <th>Prediction</th>
-        <th>Confidence (%)</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for item in history %}
-      <tr>
-        <td>{{ item.date }}</td>
-        <td>{{ item.patient_id }}</td>
-        <td>{{ item.prediction }}</td>
-        <td>{{ item.confidence }}</td>
-        <td>
-          <a href="/patient/{{ item.patient_id }}" class="table-link">
-            View History
-          </a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Patient ID</th>
+          <th>Prediction</th>
+          <th>Confidence (%)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in history %}
+        <tr>
+          <td>{{ item.date }}</td>
+          <td>{{ item.patient_id }}</td>
+          <!--<td>{{ item.prediction }}</td>-->
+          <td class="prediction-cell">
+      <div class="prediction-stage">
+          <span class="status-badge {{ item.prediction.prediction|lower|replace(' ', '-') }}">
+              {{ item.prediction.prediction }}
+          </span>
+      </div>
+
+      <ul class="lesion-list">
+          {% for lesion in item.prediction.lesion_report.lesions %}
+              <li>{{ lesion }}</li>
+          {% endfor %}
+      </ul>
+  </td>
+          <td>{{ item.confidence }}</td>
+          <td>
+            <a href="/patient/{{ item.patient_id }}" class="table-link">
+              View History
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
   <div class="back-btn">
     <a href="/predict-dr" class="btn-outline">← New Prediction</a>
   </div>
 </div>
+
+<script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a link
+    navMenu.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A') {
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+     function goBack() {
+    window.history.back();
+}
+</script>
 
 </body>
 </html>
