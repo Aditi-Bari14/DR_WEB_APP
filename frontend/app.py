@@ -10,8 +10,8 @@ import base64
 from datetime import datetime
 
 app = Flask(__name__)
-BACKEND_URL = "http://127.0.0.1:5000"
-ML_SERVICE_URL = "http://127.0.0.1:8000"  # ✅ NEW
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://127.0.0.1:5000")
+ML_SERVICE_URL = os.environ.get("ML_SERVICE_URL", "http://127.0.0.1:8000")
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -303,4 +303,4 @@ def admin():
 
 
 if __name__ == "__main__":
-    app.run(port=3000, debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 3000)), debug=False)
