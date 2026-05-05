@@ -261,7 +261,7 @@ def get_predictions():
         data.append({
             "user": r.patient_id,
             "prediction": label,
-            "confidence": round(r.confidence * 100, 2)
+            "confidence": round(r.confidence, 2)
         })
 
     return jsonify(data)
