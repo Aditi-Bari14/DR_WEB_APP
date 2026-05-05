@@ -108,12 +108,13 @@ def predict():
         ", ".join(lesion_info["lesions"])
     )
     # -------------------- Final Response --------------------
+    ML_SERVICE_URL = os.environ.get("ML_SERVICE_URL", "http://127.0.0.1:8000")
     return jsonify({
         "prediction": result,
         "confidence": round(result["confidence"] * 100, 2),
         "predicted_class": int(predicted_class),
-        "gradcam_image": f"/static/gradcam/{gradcam_filename}",
-        "prototype_image": f"/static/prototype_similarity/{prototype_name}",
+        "gradcam_image": f"{ML_SERVICE_URL}/static/gradcam/{gradcam_filename}",
+    "prototype_image": f"{ML_SERVICE_URL}/static/prototype_similarity/{prototype_name}",
         "lesion_report": lesion_report
     })
 
