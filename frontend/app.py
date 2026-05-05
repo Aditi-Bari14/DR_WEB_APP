@@ -28,11 +28,11 @@ def home():
 # -------------------------
 @app.route("/login")
 def login():
-    return render_template("login.html")
+    return render_template("login.html", backend_url=BACKEND_URL)
 
 @app.route("/register")
 def register():
-    return render_template("register.html")
+    return render_template("register.html", backend_url=BACKEND_URL)
 
 # -------------------------
 # DASHBOARD
@@ -230,7 +230,8 @@ def explain(patient_id):
         record=record,
         gradcam_image=gradcam_url,
         prototype_image=record.get("prototype_image"),
-        clinical_data=clinical_data
+        clinical_data=clinical_data,
+        ml_service_url=ML_SERVICE_URL
     )
 
 @app.route("/admin")

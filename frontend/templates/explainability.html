@@ -86,7 +86,7 @@
             <div class="xai-image-box">
                 <p class="img-title">Original Retina Image</p>
                 <img
-                    src="http://127.0.0.1:8000/uploads/{{ record.image_name }}"
+                    src="{{ ml_service_url }}/uploads/{{ record.image_name }}"
                     class="xai-img"
                     alt="Original Retina Image">
             </div>
@@ -106,7 +106,7 @@
                 <p class="img-title">Prototype Similarity</p>
                 {% if prototype_image %}
                     <img
-                        src="http://127.0.0.1:8000{{ prototype_image }}"
+                        src="{{ ml_service_url }}{{ prototype_image }}"
                         class="xai-img"
                         alt="Prototype Similarity">
                 {% else %}
