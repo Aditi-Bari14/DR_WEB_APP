@@ -340,8 +340,10 @@ button:hover, .btn-primary:hover {
 .dashboard-grid,
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+  padding: 0;
 }
 
 .dashboard-card {
@@ -349,14 +351,14 @@ button:hover, .btn-primary:hover {
   color: var(--text-dark);
   transition: 0.3s;
   display: flex;
-  flex-direction: column;    /* Stack text vertically */
-  justify-content: center;   /* Center content vertically */
-  align-items: center;       /* Center content horizontally */
-  text-align: center;        /* Ensure multi-line text is centered */
-  padding: 40px 20px;        /* Give the card consistent internal breathing room */
-  min-height: 200px;         /* Ensures all cards are the same height */
-  background: #ffffff;       /* Ensure background is white for the shadow to show */
-  border-radius: 12px;       /* Match the rounded look in your image */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 32px 24px;
+  min-height: 220px;
+  background: #ffffff;
+  border-radius: 12px;
 }
 
 .dashboard-card:hover {
@@ -364,14 +366,17 @@ button:hover, .btn-primary:hover {
   box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
 .dashboard-card h3 {
-  margin-bottom: 12px;       /* Controlled spacing between Title and Description */
+  margin-bottom: 16px;
+  margin-top: 0;
   font-size: 1.4rem;
+  color: #0b5ed7;
 }
 
 .dashboard-card p {
   margin: 0;
-  font-size: 1rem;
-  color: #666;               /* Subtler color for the description */
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.7;
 }
 /* RESULT CARDS */
 /* Ensure uniformity between result cards */
@@ -606,12 +611,20 @@ html, body {
     display: flex;
   }
 
+  .back-btn {
+    padding: 10px 14px;
+    font-size: 22px;
+    min-width: 44px;
+    min-height: 44px;
+    transition: all 0.3s ease;
+  }
+
   /* Hero Section */
   .hero {
     flex-direction: column;
     text-align: center;
-    padding: 40px 20px;
-    gap: 24px;
+    padding: 32px 16px;
+    gap: 20px;
   }
 
   .hero-text {
@@ -619,69 +632,142 @@ html, body {
   }
 
   .hero-text h1 {
-    font-size: 28px;
+    font-size: 26px;
+    margin-bottom: 16px;
   }
 
   .hero-text p {
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.8;
   }
 
   .hero-image img {
-    max-width: 280px;
+    max-width: 100%;
+    height: auto;
   }
 
   /* Container and Layout */
   .container, .container1 {
-    padding: 16px;
-    margin: 16px auto;
+    padding: 20px;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .container h2, .container1 h2 {
     font-size: 24px;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--primary);
   }
 
   .subtitle {
-    font-size: 16px;
+    font-size: 15px;
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 24px;
   }
 
   /* Forms */
   .form-box, .card, .dashboard-card, .admin-box, .xai-box {
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 28px 20px;
+    margin-bottom: 0;
+    margin: 0 auto;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-box {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    background: var(--card);
+  }
+
+  .card h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .card p {
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
   }
 
   .small-form {
     max-width: 100%;
   }
 
+  label {
+    font-weight: 600;
+    margin-top: 16px;
+    display: block;
+    color: var(--text-dark);
+    font-size: 14px;
+  }
+
   input, select {
     font-size: 16px; /* Prevents zoom on iOS */
-    padding: 12px;
+    padding: 14px 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    width: 100%;
+    transition: all 0.2s ease;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(11, 94, 215, 0.1);
   }
 
   .form-box button, button, .btn-primary {
-    padding: 14px;
+    padding: 16px;
     font-size: 16px;
-    min-height: 48px; /* Touch-friendly */
+    min-height: 52px; /* Touch-friendly */
+    margin-top: 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .form-box button:active, button:active {
+    transform: scale(0.98);
   }
 
   /* Dashboard Grid */
   .dashboard-grid, .dashboard-cards {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding: 0;
+    margin: 0;
   }
 
   .dashboard-card {
-    padding: 24px 16px;
-    min-height: 160px;
+    padding: 24px 18px;
+    min-height: auto;
+    margin: 0;
   }
 
   .dashboard-card h3 {
     font-size: 18px;
+    margin-bottom: 12px;
+    margin-top: 0;
+    text-align: center;
   }
 
   .dashboard-card p {
     font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
   }
 
   /* Tables - Make responsive */
