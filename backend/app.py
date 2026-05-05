@@ -9,7 +9,8 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-CORS(app, origins=["http://127.0.0.1:3000"])
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://127.0.0.1:3000")
+CORS(app, origins=[FRONTEND_URL])
 
 
 # Database config
@@ -19,7 +20,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 
-ML_SERVICE_URL = "http://127.0.0.1:8000"
+ML_SERVICE_URL = os.environ.get("ML_SERVICE_URL", "http://127.0.0.1:8000")
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -307,4 +308,4 @@ def get_predictions():
 # Main
 # -------------------------
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
