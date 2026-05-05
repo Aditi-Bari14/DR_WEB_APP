@@ -1,6 +1,12 @@
 flask
+requests
 numpy
 opencv-python
 pillow
-torch 
+torch
 torchvision
+torch-geometric
+torch-scatter
+torch-sparse
+torch-cluster
+torch-spline-conv
