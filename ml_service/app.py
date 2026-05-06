@@ -16,6 +16,16 @@ from inference.lesion_explanation import generate_lesion_text
 # -------------------- Flask app setup --------------------
 app = Flask(__name__)
 
+from flask_cors import CORS
+CORS(app)
+
+@app.after_request
+def add_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["ngrok-skip-browser-warning"] = "true"
+    response.headers["Cross-Origin-Resource-Policy"] = "cross-origin"
+    return response
+
 UPLOAD_FOLDER = "uploads"
 STATIC_FOLDER = "static"
 GRADCAM_FOLDER = os.path.join(STATIC_FOLDER, "gradcam")
