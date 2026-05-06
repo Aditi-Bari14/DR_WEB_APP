@@ -6,6 +6,7 @@ from models import db, PredictionHistory,User
 from flask_migrate import Migrate
 import json
 from flask_cors import CORS
+from flask import send_from_directory
 
 
 app = Flask(__name__)
@@ -113,6 +114,11 @@ def predict():
     db.session.commit()
 
     return jsonify(result)
+
+@app.route("/uploads/<filename>")
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
 
 #Get all history
 @app.route("/api/history", methods=["GET"])

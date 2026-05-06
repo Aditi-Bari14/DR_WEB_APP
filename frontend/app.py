@@ -218,8 +218,9 @@ def explain(patient_id):
     # if record.get("gradcam_image"):
     #     gradcam_url = ML_SERVICE_URL + record["gradcam_image"]
 
-    gradcam_url = record.get("gradcam_image")  # already has full URL
-    prototype_url = record.get("prototype_image")  # already has full URL
+    gradcam_url = record.get("gradcam_image")  
+    prototype_url = record.get("prototype_image")  
+    original_image_url = f"{BACKEND_URL}/uploads/{record.get('image_name')}"
 
     # ✅ Generate interpretation from prediction
     prediction_class = record.get("prediction_class")  # 0–4 integer
@@ -235,6 +236,7 @@ def explain(patient_id):
         # prototype_image=record.get("prototype_image"),
         gradcam_image=gradcam_url,
         prototype_image=prototype_url,
+        original_image=original_image_url, 
         clinical_data=clinical_data,
         ml_service_url=ML_SERVICE_URL
     )
