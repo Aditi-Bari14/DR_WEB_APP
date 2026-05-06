@@ -214,9 +214,12 @@ def explain(patient_id):
 
     record = next(r for r in history if r["patient_id"] == patient_id)
 
-    gradcam_url = None
-    if record.get("gradcam_image"):
-        gradcam_url = ML_SERVICE_URL + record["gradcam_image"]
+    # gradcam_url = None
+    # if record.get("gradcam_image"):
+    #     gradcam_url = ML_SERVICE_URL + record["gradcam_image"]
+
+    gradcam_url = record.get("gradcam_image")  # already has full URL
+    prototype_url = record.get("prototype_image")  # already has full URL
 
     # ✅ Generate interpretation from prediction
     prediction_class = record.get("prediction_class")  # 0–4 integer
@@ -228,8 +231,10 @@ def explain(patient_id):
     return render_template(
         "explainability.html",
         record=record,
+        # gradcam_image=gradcam_url,
+        # prototype_image=record.get("prototype_image"),
         gradcam_image=gradcam_url,
-        prototype_image=record.get("prototype_image"),
+        prototype_image=prototype_url,
         clinical_data=clinical_data,
         ml_service_url=ML_SERVICE_URL
     )
