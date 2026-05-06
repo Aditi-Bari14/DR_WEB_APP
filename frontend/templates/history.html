@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Prediction History</title>
@@ -10,7 +10,7 @@
 
 <div class="navbar">
   <div class="nav-left">
-              <!-- BACK BUTTON -->
+              
         <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
@@ -46,7 +46,7 @@
         <tr>
           <td>{{ item.date }}</td>
           <td>{{ item.patient_id }}</td>
-          <!--<td>{{ item.prediction }}</td>-->
+         
           <td class="prediction-cell">
       <div class="prediction-stage">
           <span class="status-badge {{ item.prediction.prediction|lower|replace(' ', '-') }}">
@@ -78,7 +78,7 @@
 </div>
 
 <script>
-    // Mobile menu toggle
+    
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
@@ -87,7 +87,7 @@
         navMenu.classList.toggle('active');
     });
 
-    // Close menu when clicking outside
+    
     document.addEventListener('click', function(event) {
         if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
             menuToggle.classList.remove('active');
@@ -95,7 +95,7 @@
         }
     });
 
-    // Close menu when clicking a link
+   
     navMenu.addEventListener('click', function(event) {
         if (event.target.tagName === 'A') {
             menuToggle.classList.remove('active');
@@ -105,6 +105,202 @@
      function goBack() {
     window.history.back();
 }
+</script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prediction History</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-left">
+    <button onclick="goBack()" class="back-btn">←</button>
+    <span class="logo">DR</span>
+    <span class="project-name">Diabetic Retinopathy</span>
+  </div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-right" id="navMenu">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/predict-dr">New Prediction</a>
+    <a href="/logout">Logout</a>
+  </div>
+</div>
+
+<div class="container1">
+  <h1 class="page-title" style="text-align:center;">Patient Prediction History</h1>
+
+  <!-- DESKTOP TABLE -->
+  <div class="table-container desktop-only">
+    <table>
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>Patient ID</th>
+          <th>Prediction</th>
+          <th>Confidence (%)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in history %}
+        <tr>
+          <td>{{ item.date }}</td>
+          <td>{{ item.patient_id }}</td>
+          <td class="prediction-cell">
+            <span class="status-badge {{ item.prediction.prediction|lower|replace(' ', '-') }}">
+              {{ item.prediction.prediction }}
+            </span>
+            <ul class="lesion-list">
+              {% for lesion in item.prediction.lesion_report.lesions %}
+                <li>{{ lesion }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td>{{ item.confidence }}</td>
+          <td>
+            <a href="/patient/{{ item.patient_id }}" class="table-link">View History</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MOBILE CARDS -->
+  <div class="mobile-only">
+    {% for item in history %}
+    <div class="history-card">
+      <div class="history-card-header">
+        <span class="status-badge {{ item.prediction.prediction|lower|replace(' ', '-') }}">
+          {{ item.prediction.prediction }}
+        </span>
+        <span class="history-date">{{ item.date }}</span>
+      </div>
+      <div class="history-card-body">
+        <div class="history-row">
+          <span class="history-label">Patient ID</span>
+          <span class="history-value">{{ item.patient_id }}</span>
+        </div>
+        <div class="history-row">
+          <span class="history-label">Confidence</span>
+          <span class="history-value">{{ item.confidence }}%</span>
+        </div>
+        <div class="history-row">
+          <span class="history-label">Findings</span>
+          <span class="history-value">
+            {% for lesion in item.prediction.lesion_report.lesions %}
+              {{ lesion }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </span>
+        </div>
+      </div>
+      <div class="history-card-footer">
+        <a href="/patient/{{ item.patient_id }}" class="btn-primary">View History →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="margin-top:20px; text-align:center;">
+    <a href="/predict-dr" class="btn-outline">← New Prediction</a>
+  </div>
+</div>
+
+<style>
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+.history-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: #f0f7ff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.history-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.history-card-body {
+  padding: 14px 16px;
+}
+
+.history-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+}
+
+.history-row:last-child {
+  border-bottom: none;
+}
+
+.history-label {
+  font-weight: 600;
+  color: #374151;
+  min-width: 90px;
+}
+
+.history-value {
+  color: #555;
+  text-align: right;
+  flex: 1;
+}
+
+.history-card-footer {
+  padding: 12px 16px;
+  text-align: right;
+  background: #fafafa;
+}
+
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+}
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const navMenu = document.getElementById('navMenu');
+  menuToggle.addEventListener('click', function() {
+    menuToggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+  document.addEventListener('click', function(event) {
+    if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+      menuToggle.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+  });
+  navMenu.addEventListener('click', function(event) {
+    if (event.target.tagName === 'A') {
+      menuToggle.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+  });
+  function goBack() { window.history.back(); }
 </script>
 
 </body>
