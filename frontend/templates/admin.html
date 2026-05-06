@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Admin Dashboard</title>
@@ -8,10 +8,10 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
+
 <div class="navbar">
     <div class="nav-left">
-          <!-- BACK BUTTON -->
+         
         <button onclick="goBack()" class="back-btn">←</button>            
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<!-- ADMIN CONTENT -->
+
 <div class="container">
 
     <h2>System Administration</h2>
@@ -35,7 +35,7 @@
         Monitor users, predictions and system activity
     </p>
 
-    <!-- ADMIN STATS -->
+    
     <div class="dashboard-cards">
 
         <div class="card">
@@ -55,7 +55,7 @@
 
     </div>
 
-    <!-- USER TABLE -->
+  
     <div class="admin-box">
         <h3>Registered Users</h3>
 
@@ -75,7 +75,7 @@
         </table>
     </div>
 
-    <!-- PREDICTION LOG -->
+    
     <div class="admin-box">
         <h3>Recent Predictions</h3>
 
@@ -96,7 +96,7 @@
     </div>
 </div>
 <script>
-    // Mobile menu toggle
+   
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
@@ -105,7 +105,7 @@
         navMenu.classList.toggle('active');
     });
 
-    // Close menu when clicking outside
+    
     document.addEventListener('click', function(event) {
         if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
             menuToggle.classList.remove('active');
@@ -113,7 +113,7 @@
         }
     });
 
-    // Close menu when clicking a link
+   
     navMenu.addEventListener('click', function(event) {
         if (event.target.tagName === 'A') {
             menuToggle.classList.remove('active');
@@ -125,5 +125,158 @@
 }
 </script>
 
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-left">
+    <button onclick="goBack()" class="back-btn">←</button>
+    <span class="logo">DR</span>
+    <span class="project-name">Diabetic Retinopathy</span>
+  </div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-right" id="navMenu">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/login">Logout</a>
+  </div>
+</div>
+
+<div class="container1">
+  <h2 style="text-align:center;">System Administration</h2>
+  <p class="subtitle" style="text-align:center;">Monitor users, predictions and system activity</p>
+
+  <!-- STATS CARDS -->
+  <div class="dashboard-cards" style="margin-bottom:24px;">
+    <div class="card" style="text-align:center;">
+      <h3>Total Users</h3>
+      <p style="font-size:36px; font-weight:700; color:#0b5ed7; margin:0;">{{ stats.total_users }}</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <h3>Total Predictions</h3>
+      <p style="font-size:36px; font-weight:700; color:#0b5ed7; margin:0;">{{ stats.total_predictions }}</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <h3>High Risk Cases</h3>
+      <p style="font-size:36px; font-weight:700; color:#dc3545; margin:0;">{{ stats.high_risk }}</p>
+    </div>
+  </div>
+
+  <!-- USERS -->
+  <div class="admin-box">
+    <h3>Registered Users</h3>
+
+    <!-- Desktop -->
+    <div class="table-container desktop-only">
+      <table>
+        <tr><th>Name</th><th>Email</th><th>Role</th></tr>
+        {% for user in users %}
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.role }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- Mobile -->
+    <div class="mobile-only">
+      {% for user in users %}
+      <div class="history-card">
+        <div class="history-card-header">
+          <span style="font-weight:600;">{{ user.name }}</span>
+          <span class="status-badge" style="background:#e7f1ff; color:#0b5ed7;">{{ user.role }}</span>
+        </div>
+        <div class="history-card-body">
+          <div class="history-row">
+            <span class="history-label">Email</span>
+            <span class="history-value">{{ user.email }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- PREDICTIONS -->
+  <div class="admin-box">
+    <h3>Recent Predictions</h3>
+
+    <!-- Desktop -->
+    <div class="table-container desktop-only">
+      <table>
+        <tr><th>User</th><th>Prediction</th><th>Confidence</th></tr>
+        {% for p in predictions %}
+        <tr>
+          <td>{{ p.user }}</td>
+          <td>{{ p.prediction }}</td>
+          <td>{{ p.confidence }}%</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- Mobile -->
+    <div class="mobile-only">
+      {% for p in predictions %}
+      <div class="history-card">
+        <div class="history-card-header">
+          <span style="font-weight:600;">Patient: {{ p.user }}</span>
+          <span class="status-badge mild-dr">{{ p.prediction }}</span>
+        </div>
+        <div class="history-card-body">
+          <div class="history-row">
+            <span class="history-label">Confidence</span>
+            <span class="history-value">{{ p.confidence }}%</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+.history-card { background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); margin-bottom: 16px; overflow: hidden; }
+.history-card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: #f0f7ff; border-bottom: 1px solid #e5e7eb; }
+.history-card-body { padding: 14px 16px; }
+.history-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+.history-row:last-child { border-bottom: none; }
+.history-label { font-weight: 600; color: #374151; min-width: 90px; }
+.history-value { color: #555; text-align: right; flex: 1; }
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+}
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const navMenu = document.getElementById('navMenu');
+  menuToggle.addEventListener('click', function() {
+    menuToggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+  document.addEventListener('click', function(event) {
+    if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+      menuToggle.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+  });
+  function goBack() { window.history.back(); }
+</script>
 </body>
 </html>

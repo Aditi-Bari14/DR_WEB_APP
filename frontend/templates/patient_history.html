@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Patient {{ patient_id }} History</title>
@@ -10,7 +10,7 @@
 
 <div class="navbar">
  <div class="nav-left">
-              <!-- BACK BUTTON -->
+             
         <button onclick="goBack()" class="back-btn">←</button>
             <span class="logo">DR</span>
             <span class="project-name">Diabetic Retinopathy</span>
@@ -80,7 +80,7 @@
    function goBack() {
     window.history.back();
 }
-    // Mobile menu toggle
+   
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
@@ -90,5 +90,157 @@
     });
 </script>
 
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patient {{ patient_id }} History</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="nav-left">
+    <button onclick="goBack()" class="back-btn">←</button>
+    <span class="logo">DR</span>
+    <span class="project-name">Diabetic Retinopathy</span>
+  </div>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="nav-right" id="navMenu">
+    <a href="/view-history">All Patients</a>
+    <a href="/predict-dr">New Prediction</a>
+    <a href="/logout">Logout</a>
+  </div>
+</div>
+
+<div class="container1">
+  <h1 class="page-title" style="text-align:center;">Patient ID: {{ patient_id }}</h1>
+
+  {% if plot_img %}
+  <div style="text-align:center; margin-bottom:24px;">
+    <h3 class="section-title">Disease Progression Trend</h3>
+    <img src="data:image/png;base64,{{ plot_img }}" alt="DR Trend" style="max-width:100%; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.1);">
+  </div>
+  {% endif %}
+
+  {% if history %}
+
+  <!-- DESKTOP TABLE -->
+  <div class="table-container desktop-only">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Prediction</th>
+          <th>Confidence (%)</th>
+          <th>Age</th>
+          <th>HbA1c</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in history %}
+        <tr>
+          <td>{{ record.date }}</td>
+          <td class="prediction-cell">
+            <span class="status-badge {{ record.prediction.prediction|lower|replace(' ', '-') }}">
+              {{ record.prediction.prediction }}
+            </span>
+            <ul class="lesion-list">
+              {% for lesion in record.prediction.lesion_report.lesions %}
+                <li>{{ lesion }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td>{{ record.confidence }}</td>
+          <td>{{ record.age }}</td>
+          <td>{{ record.hba1c }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MOBILE CARDS -->
+  <div class="mobile-only">
+    {% for record in history %}
+    <div class="history-card">
+      <div class="history-card-header">
+        <span class="status-badge {{ record.prediction.prediction|lower|replace(' ', '-') }}">
+          {{ record.prediction.prediction }}
+        </span>
+        <span class="history-date">{{ record.date }}</span>
+      </div>
+      <div class="history-card-body">
+        <div class="history-row">
+          <span class="history-label">Confidence</span>
+          <span class="history-value">{{ record.confidence }}%</span>
+        </div>
+        <div class="history-row">
+          <span class="history-label">Age</span>
+          <span class="history-value">{{ record.age }}</span>
+        </div>
+        <div class="history-row">
+          <span class="history-label">HbA1c</span>
+          <span class="history-value">{{ record.hba1c }}</span>
+        </div>
+        <div class="history-row">
+          <span class="history-label">Findings</span>
+          <span class="history-value">
+            {% for lesion in record.prediction.lesion_report.lesions %}
+              {{ lesion }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <p style="text-align:center; color:#6b7280;">No previous records found for this patient.</p>
+  {% endif %}
+
+  <div style="margin-top:20px; text-align:center;">
+    <a href="/view-history" class="btn-outline">← Back to All Patients</a>
+  </div>
+</div>
+
+<style>
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+.history-card { background: white; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); margin-bottom: 16px; overflow: hidden; }
+.history-card-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: #f0f7ff; border-bottom: 1px solid #e5e7eb; }
+.history-date { font-size: 12px; color: #6b7280; }
+.history-card-body { padding: 14px 16px; }
+.history-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+.history-row:last-child { border-bottom: none; }
+.history-label { font-weight: 600; color: #374151; min-width: 90px; }
+.history-value { color: #555; text-align: right; flex: 1; }
+@media (max-width: 768px) {
+  .desktop-only { display: none; }
+  .mobile-only { display: block; }
+}
+</style>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const navMenu = document.getElementById('navMenu');
+  menuToggle.addEventListener('click', function() {
+    menuToggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+  });
+  document.addEventListener('click', function(event) {
+    if (!menuToggle.contains(event.target) && !navMenu.contains(event.target)) {
+      menuToggle.classList.remove('active');
+      navMenu.classList.remove('active');
+    }
+  });
+  function goBack() { window.history.back(); }
+</script>
 </body>
 </html>
