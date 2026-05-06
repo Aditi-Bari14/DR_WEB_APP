@@ -19,6 +19,15 @@ app = Flask(__name__)
 from flask_cors import CORS
 CORS(app)
 
+import base64
+
+def image_to_base64(image_path):
+    try:
+        with open(image_path, "rb") as img_file:
+            return "data:image/jpeg;base64," + base64.b64encode(img_file.read()).decode("utf-8")
+    except:
+        return None
+
 @app.after_request
 def add_headers(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
@@ -123,8 +132,10 @@ def predict():
         "prediction": result,
         "confidence": round(result["confidence"] * 100, 2),
         "predicted_class": int(predicted_class),
-        "gradcam_image": f"{ML_SERVICE_URL}/static/gradcam/{gradcam_filename}",
-    "prototype_image": f"{ML_SERVICE_URL}/static/prototype_similarity/{prototype_name}",
+    #     "gradcam_image": f"{ML_SERVICE_URL}/static/gradcam/{gradcam_filename}",
+    # "prototype_image": f"{ML_SERVICE_URL}/static/prototype_similarity/{prototype_name}",
+    "gradcam_image": image_to_base64(gradcam_path),
+    "prototype_image": image_to_base64(prototype_save_path),
         "lesion_report": lesion_report
     })
 
