@@ -238,7 +238,8 @@ def explain(patient_id):
         prototype_image=prototype_url,
         original_image=original_image_url, 
         clinical_data=clinical_data,
-        ml_service_url=ML_SERVICE_URL
+        ml_service_url=ML_SERVICE_URL,
+        backend_url=BACKEND_URL
     )
 
 @app.route("/admin")
